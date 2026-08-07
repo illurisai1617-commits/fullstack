@@ -1,0 +1,3233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanskriti - Indian Culture & History Quest</title>
+    <meta name="description" content="An interactive educational game for students featuring divine imagery, historical video reels, quests, and 2D virtual character battles from Ramayana & Mahabharata.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --royal-maroon: #3B0B14;
+            --deep-red: #621220;
+            --gold-primary: #E5C158;
+            --gold-bright: #FFDF00;
+            --peacock-teal: #0E5E6F;
+            --peacock-bright: #00A896;
+            --saffron-orange: #FF7700;
+            --cream-bg: #FDFBF7;
+            --dark-card: rgba(26, 8, 14, 0.85);
+            --glass-border: rgba(229, 193, 88, 0.3);
+            --font-title: 'Cinzel', serif;
+            --font-body: 'Outfit', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: radial-gradient(circle at top center, #52101E 0%, #20040A 60%, #0D0104 100%);
+            color: var(--cream-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        body.power-active-2x {
+            background: radial-gradient(circle at top center, #7A4200 0%, #3B0B14 60%, #0D0104 100%);
+            box-shadow: inset 0 0 50px rgba(255, 223, 0, 0.4);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(rgba(229, 193, 88, 0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* HEADER */
+        header {
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(180deg, rgba(15, 3, 6, 0.95) 0%, rgba(35, 7, 13, 0.8) 100%);
+            border-bottom: 2px solid var(--gold-primary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gold-primary);
+            mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>') center/contain no-repeat;
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>') center/contain no-repeat;
+            background-color: var(--gold-bright);
+        }
+
+        .brand-text h1 {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            color: var(--gold-bright);
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .brand-text p {
+            font-size: 0.85rem;
+            color: #E0C097;
+            letter-spacing: 1px;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            background: rgba(229, 193, 88, 0.1);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .stat-badge span.val {
+            color: var(--gold-bright);
+            font-size: 1.1rem;
+        }
+
+        .audio-btn {
+            background: linear-gradient(135deg, var(--saffron-orange), var(--deep-red));
+            border: 1px solid var(--gold-primary);
+            color: #FFF;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 119, 0, 0.5);
+        }
+
+        /* POWER-UP INVENTORY BAR */
+        .powers-bar {
+            position: relative;
+            z-index: 10;
+            background: rgba(20, 4, 9, 0.9);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0.6rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .powers-title {
+            font-family: var(--font-title);
+            font-size: 0.88rem;
+            color: var(--gold-bright);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .power-chip {
+            background: rgba(40, 10, 20, 0.8);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 0.4rem 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+
+        .power-chip.unlocked {
+            opacity: 1;
+            filter: grayscale(0%);
+            border-color: var(--gold-bright);
+            background: linear-gradient(135deg, var(--deep-red), var(--peacock-teal));
+            color: #FFF;
+        }
+
+        .power-chip.unlocked:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(255, 223, 0, 0.4);
+        }
+
+        .power-chip.active {
+            background: linear-gradient(135deg, var(--saffron-orange), var(--gold-bright)) !important;
+            color: #000 !important;
+            animation: pulseGlow 1.5s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from { box-shadow: 0 0 8px rgba(255, 215, 0, 0.5); }
+            to { box-shadow: 0 0 20px rgba(255, 215, 0, 0.9); }
+        }
+
+        /* NAVIGATION */
+        nav {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(15, 3, 6, 0.6);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(229, 193, 88, 0.2);
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(30, 8, 14, 0.8);
+            border: 1px solid var(--glass-border);
+            color: #D1B894;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            font-family: var(--font-title);
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: linear-gradient(135deg, var(--deep-red), var(--peacock-teal));
+            color: var(--gold-bright);
+            border-color: var(--gold-bright);
+            box-shadow: 0 4px 15px rgba(229, 193, 88, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* MAIN CONTAINER */
+        main {
+            position: relative;
+            z-index: 5;
+            flex: 1;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .game-section {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+
+        .game-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SECTION HEADERS */
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-title);
+            font-size: 2.2rem;
+            color: var(--gold-bright);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        .section-header p {
+            color: #C8B293;
+            font-size: 1.05rem;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* EPIC BATTLES OF DHARMA STYLES */
+        .battle-select-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .battle-card {
+            background: var(--dark-card);
+            border: 2px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+            transition: all 0.35s ease;
+        }
+
+        .battle-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--saffron-orange);
+            box-shadow: 0 12px 35px rgba(255, 119, 0, 0.4);
+        }
+
+        .battle-card-title {
+            font-family: var(--font-title);
+            font-size: 1.4rem;
+            color: var(--gold-bright);
+            margin-bottom: 0.4rem;
+        }
+
+        .battle-card-sub {
+            color: var(--peacock-bright);
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .battle-card-desc {
+            font-size: 0.9rem;
+            color: #D6C2A5;
+            line-height: 1.5;
+            margin-bottom: 1.2rem;
+        }
+
+        /* BATTLE ARENA DISPLAY */
+        .battle-arena-container {
+            background: var(--dark-card);
+            border: 2px solid var(--gold-primary);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+            display: none;
+            margin-top: 1.5rem;
+        }
+
+        .battle-hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--glass-border);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .fighter-hud {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .fighter-avatar {
+            font-size: 2.5rem;
+            background: rgba(229, 193, 88, 0.1);
+            border: 1px solid var(--gold-primary);
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fighter-name {
+            font-family: var(--font-title);
+            font-size: 1.1rem;
+            color: var(--gold-bright);
+        }
+
+        .hp-bar-bg {
+            width: 180px;
+            height: 14px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 7px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-top: 0.3rem;
+        }
+
+        .hp-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #00FFCC, #00A896);
+            transition: width 0.4s ease;
+        }
+
+        .hp-bar-fill.enemy {
+            background: linear-gradient(90deg, #FF4D4D, #B41428);
+        }
+
+        .battle-canvas-viewport {
+            width: 100%;
+            height: 380px;
+            background: #080205;
+            border-radius: 16px;
+            border: 2px solid var(--gold-primary);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+        }
+
+        #battle-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .battle-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .btn-astra {
+            background: linear-gradient(135deg, var(--deep-red), var(--royal-maroon));
+            border: 1px solid var(--gold-primary);
+            color: #FFF;
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+
+        .btn-astra:hover {
+            background: linear-gradient(135deg, var(--saffron-orange), var(--gold-bright));
+            color: #1A050B;
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        /* MODE 0: QUESTS & TASKS SECTION */
+        .quest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .quest-card {
+            background: var(--dark-card);
+            border: 2px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            transition: all 0.3s ease;
+        }
+
+        .quest-card.completed {
+            border-color: #00A896;
+            background: linear-gradient(180deg, rgba(26, 8, 14, 0.95) 0%, rgba(14, 94, 111, 0.3) 100%);
+        }
+
+        .quest-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-bright);
+        }
+
+        .quest-badge-tag {
+            position: absolute;
+            top: 12px; right: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.7rem;
+            border-radius: 12px;
+            background: rgba(229, 193, 88, 0.15);
+            color: var(--gold-bright);
+            border: 1px solid var(--glass-border);
+        }
+
+        .quest-title {
+            font-family: var(--font-title);
+            font-size: 1.3rem;
+            color: var(--gold-bright);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .quest-desc {
+            font-size: 0.9rem;
+            color: #D6C2A5;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .quest-progress-bar-bg {
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .quest-progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--saffron-orange), var(--gold-bright));
+            transition: width 0.4s ease;
+        }
+
+        .quest-reward-box {
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            padding: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .quest-reward-info {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .quest-reward-icon {
+            font-size: 1.6rem;
+        }
+
+        .quest-reward-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #FFF;
+        }
+
+        .quest-reward-sub {
+            font-size: 0.75rem;
+            color: #00A896;
+        }
+
+        .btn-claim {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background: rgba(255,255,255,0.1);
+            color: #8E7859;
+            transition: all 0.3s ease;
+        }
+
+        .btn-claim.ready {
+            background: linear-gradient(135deg, var(--gold-primary), var(--saffron-orange));
+            color: #1A050B;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+            cursor: pointer;
+            animation: pulseGlow 1.2s infinite alternate;
+        }
+
+        .btn-claim.claimed {
+            background: rgba(0, 168, 150, 0.3);
+            color: #00FFCC;
+            border: 1px solid #00A896;
+            cursor: default;
+        }
+
+        /* MODE 1: DEITY QUIZ & GALLERY */
+        .deity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .deity-card {
+            background: var(--dark-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .deity-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--gold-bright);
+            box-shadow: 0 12px 30px rgba(229, 193, 88, 0.35);
+        }
+
+        .deity-img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            background: #110307;
+            overflow: hidden;
+        }
+
+        .deity-img-wrapper img, .deity-img-wrapper svg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .deity-card:hover .deity-img-wrapper img {
+            transform: scale(1.08);
+        }
+
+        .deity-tag {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(14, 94, 111, 0.85);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--gold-primary);
+            color: #FFF;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .deity-content {
+            padding: 1.4rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .deity-content h3 {
+            font-family: var(--font-title);
+            font-size: 1.4rem;
+            color: var(--gold-bright);
+            margin-bottom: 0.4rem;
+        }
+
+        .deity-title-sub {
+            font-size: 0.85rem;
+            color: #00A896;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .deity-desc {
+            font-size: 0.9rem;
+            color: #D6C2A5;
+            line-height: 1.5;
+            margin-bottom: 1.2rem;
+            flex: 1;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 0.6rem;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold-primary), var(--saffron-orange));
+            color: #20040A;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--gold-bright), #FF9900);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(229, 193, 88, 0.1);
+            border: 1px solid var(--glass-border);
+            color: var(--gold-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(229, 193, 88, 0.25);
+            color: #FFF;
+        }
+
+        /* QUIZ MODAL CONTAINER */
+        .quiz-box {
+            background: var(--dark-card);
+            border: 2px solid var(--gold-primary);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 750px;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(229, 193, 88, 0.2);
+            padding-bottom: 0.8rem;
+        }
+
+        .quiz-q-num {
+            font-family: var(--font-title);
+            color: var(--gold-bright);
+            font-size: 1.1rem;
+        }
+
+        .quiz-img-preview {
+            width: 100%;
+            max-height: 280px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .quiz-question {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #FFF;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-opt-btn {
+            background: rgba(40, 10, 20, 0.7);
+            border: 1px solid rgba(229, 193, 88, 0.25);
+            color: #E2D0B5;
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 1rem;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .quiz-opt-btn:hover {
+            background: rgba(98, 18, 32, 0.8);
+            border-color: var(--gold-primary);
+            color: #FFF;
+            transform: translateX(5px);
+        }
+
+        .quiz-opt-btn.correct {
+            background: rgba(0, 168, 150, 0.8) !important;
+            border-color: #00FFCC !important;
+            color: #FFF !important;
+            font-weight: 700;
+        }
+
+        .quiz-opt-btn.wrong {
+            background: rgba(180, 20, 40, 0.8) !important;
+            border-color: #FF4D4D !important;
+            color: #FFF !important;
+        }
+
+        .quiz-opt-btn.eliminated {
+            opacity: 0.2;
+            pointer-events: none;
+            text-decoration: line-through;
+        }
+
+        .quiz-feedback {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.success {
+            background: rgba(0, 168, 150, 0.2);
+            border: 1px solid #00A896;
+            color: #A3FFF2;
+        }
+
+        .quiz-feedback.error {
+            background: rgba(180, 20, 40, 0.2);
+            border: 1px solid #FF4D4D;
+            color: #FFB3B3;
+        }
+
+        /* MODE 2: HISTORY VIDEO REELS */
+        .history-timeline {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-primary) rgba(0,0,0,0.5);
+        }
+
+        .era-tab {
+            flex: 0 0 200px;
+            background: var(--dark-card);
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .era-tab:hover, .era-tab.active {
+            border-color: var(--gold-bright);
+            background: linear-gradient(180deg, var(--deep-red) 0%, rgba(14, 94, 111, 0.8) 100%);
+            transform: translateY(-4px);
+        }
+
+        .era-date {
+            font-size: 0.78rem;
+            color: var(--gold-primary);
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .era-name {
+            font-family: var(--font-title);
+            font-size: 1rem;
+            color: #FFF;
+        }
+
+        .reel-container {
+            background: var(--dark-card);
+            border: 2px solid var(--gold-primary);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.9);
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 900px) {
+            .reel-container {
+                grid-template-columns: 1.4fr 1fr;
+            }
+        }
+
+        .video-viewport {
+            position: relative;
+            background: #000;
+            min-height: 340px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .video-canvas {
+            width: 100%;
+            height: 100%;
+            min-height: 340px;
+            display: block;
+            background: #080204;
+        }
+
+        .video-controls-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .play-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--gold-primary);
+            border: none;
+            color: #000;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            transition: transform 0.2s ease;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            background: var(--gold-bright);
+        }
+
+        .video-progress {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .video-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--saffron-orange), var(--gold-bright));
+            transition: width 0.1s linear;
+        }
+
+        .narration-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0,0,0,0.75);
+            border: 1px solid var(--gold-primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--gold-bright);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reel-details {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .reel-details h3 {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            color: var(--gold-bright);
+            margin-bottom: 0.5rem;
+        }
+
+        .reel-period {
+            color: var(--peacock-bright);
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+        }
+
+        .reel-script {
+            font-size: 0.95rem;
+            color: #E2D0B5;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .reel-keypoints {
+            background: rgba(229, 193, 88, 0.05);
+            border-left: 3px solid var(--gold-primary);
+            padding: 0.8rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .reel-keypoints li {
+            font-size: 0.88rem;
+            color: #C8B293;
+            margin-left: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        /* MODE 3: HERITAGE MEMORY MATCH */
+        .memory-game-header {
+            display: flex;
+            justify-content: space-around;
+            background: var(--dark-card);
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .memory-stat {
+            text-align: center;
+        }
+
+        .memory-stat-label {
+            font-size: 0.8rem;
+            color: #C8B293;
+        }
+
+        .memory-stat-val {
+            font-family: var(--font-title);
+            font-size: 1.4rem;
+            color: var(--gold-bright);
+            font-weight: 700;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 600px) {
+            .memory-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .memory-card {
+            aspect-ratio: 1 / 1;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .memory-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            border-radius: 12px;
+        }
+
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .memory-card-front, .memory-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .memory-card-front {
+            background: linear-gradient(135deg, #4A0E17, #1E050B);
+            border: 2px solid var(--gold-primary);
+        }
+
+        .memory-card-front::after {
+            content: "☸";
+            font-size: 2.2rem;
+            color: var(--gold-primary);
+            opacity: 0.7;
+        }
+
+        .memory-card-back {
+            background: linear-gradient(135deg, var(--peacock-teal), #06283D);
+            border: 2px solid var(--gold-bright);
+            transform: rotateY(180deg);
+            text-align: center;
+        }
+
+        .memory-card-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .memory-card-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #FFF;
+        }
+
+        /* MODE 4: GYAN KOSH (ENCYCLOPEDIA) */
+        .encyclo-tabs {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .encyclo-tab-btn {
+            background: var(--dark-card);
+            border: 1px solid var(--glass-border);
+            color: #D6C2A5;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .encyclo-tab-btn.active {
+            background: var(--gold-primary);
+            color: #20040A;
+            font-weight: 700;
+        }
+
+        .encyclo-container {
+            background: var(--dark-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .encyclo-article {
+            line-height: 1.7;
+            color: #E2D0B5;
+        }
+
+        .encyclo-article h3 {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            color: var(--gold-bright);
+            margin-bottom: 1rem;
+        }
+
+        /* BADGES GALLERY */
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        .badge-item {
+            background: rgba(20, 5, 10, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+            opacity: 0.4;
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+
+        .badge-item.unlocked {
+            opacity: 1;
+            filter: grayscale(0%);
+            border-color: var(--gold-bright);
+            background: linear-gradient(180deg, rgba(62, 11, 20, 0.9) 0%, rgba(14, 94, 111, 0.6) 100%);
+            box-shadow: 0 4px 15px rgba(229, 193, 88, 0.3);
+        }
+
+        .badge-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-name {
+            font-family: var(--font-title);
+            font-weight: 700;
+            color: var(--gold-bright);
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .badge-desc {
+            font-size: 0.78rem;
+            color: #C8B293;
+        }
+
+        /* MODAL POPUP */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--royal-maroon);
+            border: 2px solid var(--gold-bright);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #FFF;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(10, 2, 5, 0.9);
+            border-top: 1px solid rgba(229, 193, 88, 0.2);
+            color: #9E8565;
+            font-size: 0.85rem;
+            margin-top: auto;
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="brand">
+            <div class="brand-icon"></div>
+            <div class="brand-text">
+                <h1>SANSKRITI</h1>
+                <p>INDIAN CULTURE & HISTORY QUEST</p>
+            </div>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-badge">
+                🏆 Score: <span class="val" id="user-score">0</span>
+            </div>
+            <div class="stat-badge">
+                🔥 Streak: <span class="val" id="user-streak">0</span>
+            </div>
+            <div class="stat-badge" id="multiplier-badge" style="display:none; background: rgba(255, 119, 0, 0.2); border-color: var(--saffron-orange);">
+                ⚡ Power Active: <span class="val" style="color:#FF7700;">2x PTS</span>
+            </div>
+            <button class="audio-btn" id="audio-toggle-btn" onclick="toggleAudioSynth()">
+                🎵 Ambient Audio: OFF
+            </button>
+        </div>
+    </header>
+
+    <!-- IN-GAME POWERS INVENTORY BAR -->
+    <div class="powers-bar">
+        <div class="powers-title">✨ Unlocked Divine Powers:</div>
+        <div class="power-chip" id="power-hint" onclick="usePower('hint')">
+            🔮 Third-Eye Vision (1 Hint)
+        </div>
+        <div class="power-chip" id="power-2x" onclick="usePower('2x')">
+            ⚡ Saffron Surge (2x Points)
+        </div>
+        <div class="power-chip" id="power-peek" onclick="usePower('peek')">
+            👁️ Chakra Sight (Peek Memory)
+        </div>
+        <div class="power-chip" id="power-shield" onclick="usePower('shield')">
+            🛡️ Shield of Dharma (Streak Shield)
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <button class="nav-btn active" onclick="switchTab('battles')">
+            ⚔️ Epic Battles of Dharma
+        </button>
+        <button class="nav-btn" onclick="switchTab('quests')">
+            📜 Tasks & Quests
+        </button>
+        <button class="nav-btn" onclick="switchTab('deities')">
+            🛕 Divine Deities & Lore
+        </button>
+        <button class="nav-btn" onclick="switchTab('history')">
+            🎬 History Video Reels
+        </button>
+        <button class="nav-btn" onclick="switchTab('memory')">
+            🧩 Heritage Memory Match
+        </button>
+        <button class="nav-btn" onclick="switchTab('encyclopedia')">
+            📜 Gyan Kosh & Badges
+        </button>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- MODE 0: EPIC BATTLES OF DHARMA -->
+        <section id="section-battles" class="game-section active">
+            <div class="section-header">
+                <h2>⚔️ Epic Battles of Dharma & History</h2>
+                <p>Lead virtual heroes into battle scenes from the Ramayana, Mahabharata, and Ancient Indian History!</p>
+            </div>
+
+            <!-- BATTLE CARDS SELECTOR -->
+            <div class="battle-select-grid" id="battle-select-container">
+                <!-- Battle cards populated by JS -->
+            </div>
+
+            <!-- BATTLE ARENA DISPLAY -->
+            <div class="battle-arena-container" id="battle-arena">
+                <div class="battle-hud">
+                    <div class="fighter-hud">
+                        <div class="fighter-avatar" id="hero-avatar">🏹</div>
+                        <div>
+                            <div class="fighter-name" id="hero-name">Lord Rama</div>
+                            <div class="hp-bar-bg">
+                                <div class="hp-bar-fill" id="hero-hp-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-family: var(--font-title); color: var(--gold-bright); font-size: 1.5rem; font-weight: bold;">VS</div>
+                    <div class="fighter-hud" style="flex-direction: row-reverse;">
+                        <div class="fighter-avatar" id="enemy-avatar">👹</div>
+                        <div style="text-align: right;">
+                            <div class="fighter-name" id="enemy-name">Ravana</div>
+                            <div class="hp-bar-bg">
+                                <div class="hp-bar-fill enemy" id="enemy-hp-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="battle-canvas-viewport">
+                    <canvas id="battle-canvas" width="800" height="380"></canvas>
+                </div>
+
+                <div id="battle-tactical-question" style="background: rgba(0,0,0,0.6); border: 1px solid var(--gold-primary); padding: 1.2rem; border-radius: 12px; margin-bottom: 1.5rem; color: #FFF; font-size: 1.05rem; line-height: 1.4;">
+                    Select an Astra Strategy to launch your attack!
+                </div>
+
+                <div class="battle-controls" id="battle-actions-container">
+                    <!-- Action buttons populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- MODE: TASKS & QUESTS SECTION -->
+        <section id="section-quests" class="game-section">
+            <div class="section-header">
+                <h2>Student Quests & In-Game Rewards</h2>
+                <p>Complete learning tasks across the game to unlock magical Divine Powers, score multipliers, and hint abilities!</p>
+            </div>
+
+            <div class="quest-grid" id="quests-container">
+                <!-- Quests populated by JS -->
+            </div>
+        </section>
+
+        <!-- MODE: DEITIES & MYTHOLOGY QUIZ -->
+        <section id="section-deities" class="game-section">
+            <div class="section-header">
+                <h2>Gods, Goddesses & Sacred History</h2>
+                <p>Explore divine imagery of Indian deities, discover their sacred lore, associated festivals, and test your knowledge with interactive trivia!</p>
+            </div>
+
+            <div class="deity-grid" id="deity-cards-container">
+                <!-- Cards populated by JavaScript -->
+            </div>
+
+            <!-- QUIZ DISPLAY BOX -->
+            <div class="quiz-box" id="quiz-container" style="display: none;">
+                <div class="quiz-header">
+                    <span class="quiz-q-num" id="quiz-progress-text">Deity Quiz Challenge</span>
+                    <div style="display:flex; gap:0.5rem;">
+                        <button class="btn-secondary" id="use-hint-in-quiz-btn" style="display:none;" onclick="usePower('hint')">🔮 Use Third-Eye Hint</button>
+                        <button class="btn-secondary" onclick="closeQuizModal()">✖ Close Quiz</button>
+                    </div>
+                </div>
+                <img id="quiz-deity-img" class="quiz-img-preview" src="" alt="Deity Trivia">
+                <div class="quiz-question" id="quiz-question-text">Loading question...</div>
+                <div class="quiz-options" id="quiz-options-container"></div>
+                <div class="quiz-feedback" id="quiz-feedback-box"></div>
+                <button class="btn-primary" id="quiz-next-btn" style="display: none; width: 100%; padding: 0.9rem;" onclick="loadNextQuestion()">Next Question ➔</button>
+            </div>
+        </section>
+
+        <!-- MODE: HISTORY VIDEO REELS -->
+        <section id="section-history" class="game-section">
+            <div class="section-header">
+                <h2>Chronicle of Eras: Video Reels</h2>
+                <p>Travel through Indian history from the ancient Vedic Era to Modern Independence. Watch animated reel presentations and listen to history audio guides.</p>
+            </div>
+
+            <div class="history-timeline" id="era-timeline-bar">
+                <!-- Era tabs populated by JavaScript -->
+            </div>
+
+            <div class="reel-container">
+                <div class="video-viewport">
+                    <canvas id="video-canvas" class="video-canvas" width="640" height="360"></canvas>
+                    <div class="narration-badge">
+                        🔊 <span id="speech-status">Voice Narration Ready</span>
+                    </div>
+                    <div class="video-controls-overlay">
+                        <button class="play-btn" id="reel-play-btn" onclick="toggleReelPlayback()">▶</button>
+                        <div class="video-progress" onclick="seekReel(event)">
+                            <div class="video-progress-bar" id="reel-progress-bar"></div>
+                        </div>
+                        <button class="audio-btn" onclick="speakCurrentEraScript()" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">
+                            📢 Read Aloud
+                        </button>
+                    </div>
+                </div>
+                <div class="reel-details">
+                    <div>
+                        <h3 id="reel-title">Loading Era...</h3>
+                        <div class="reel-period" id="reel-date-range">----</div>
+                        <p class="reel-script" id="reel-description">Select an era from the timeline to watch video history reels.</p>
+                        <div class="reel-keypoints">
+                            <strong style="color: var(--gold-bright); font-size: 0.9rem; display:block; margin-bottom:0.4rem;">Historical Highlights:</strong>
+                            <ul id="reel-bullets"></ul>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="padding: 0.8rem; font-size: 0.95rem;" onclick="startEraQuiz()">
+                        ⚡ Test Your Knowledge on This Era
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODE: HERITAGE MEMORY MATCH -->
+        <section id="section-memory" class="game-section">
+            <div class="section-header">
+                <h2>Heritage Symbol & Art Match</h2>
+                <p>Match pairs of classical dance forms, ancient Indian temple architecture, and sacred symbols!</p>
+            </div>
+
+            <div class="memory-game-header">
+                <div class="memory-stat">
+                    <div class="memory-stat-label">Pairs Matched</div>
+                    <div class="memory-stat-val" id="memory-matches">0 / 6</div>
+                </div>
+                <div class="memory-stat">
+                    <div class="memory-stat-label">Total Moves</div>
+                    <div class="memory-stat-val" id="memory-moves">0</div>
+                </div>
+                <div style="display:flex; gap:0.5rem;">
+                    <button class="btn-secondary" id="use-peek-in-memory-btn" style="display:none;" onclick="usePower('peek')">👁️ Use Chakra Sight</button>
+                    <button class="btn-secondary" onclick="initMemoryGame()">🔄 Restart Game</button>
+                </div>
+            </div>
+
+            <div class="memory-grid" id="memory-grid-container">
+                <!-- Memory Cards populated by JS -->
+            </div>
+        </section>
+
+        <!-- MODE: GYAN KOSH ENCYCLOPEDIA & BADGES -->
+        <section id="section-encyclopedia" class="game-section">
+            <div class="section-header">
+                <h2>Gyan Kosh (Heritage Encyclopedia) & Badges</h2>
+                <p>Unlock achievements as you learn about Indian art, literature, festivals, and architecture.</p>
+            </div>
+
+            <div class="encyclo-tabs">
+                <button class="encyclo-tab-btn active" onclick="loadEncyclopediaTopic('epics')">📖 Ancient Epics</button>
+                <button class="encyclo-tab-btn" onclick="loadEncyclopediaTopic('architecture')">🛕 Temple Architecture</button>
+                <button class="encyclo-tab-btn" onclick="loadEncyclopediaTopic('dances')">💃 Classical Dances</button>
+                <button class="encyclo-tab-btn" onclick="loadEncyclopediaTopic('festivals')">🪔 Festivals of India</button>
+            </div>
+
+            <div class="encyclo-container">
+                <div class="encyclo-article" id="encyclo-content-display">
+                    <!-- Encyclopedia text populated by JS -->
+                </div>
+            </div>
+
+            <h3 style="font-family: var(--font-title); color: var(--gold-bright); margin-top: 2.5rem; text-align: center; font-size: 1.6rem;">
+                🎖️ Your Achievement Badges
+            </h3>
+            <div class="badges-grid" id="badges-container">
+                <!-- Badges populated by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- LORE MODAL POPUP -->
+    <div class="modal-overlay" id="lore-modal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeLoreModal()">✖</button>
+            <h3 id="modal-title" style="font-family: var(--font-title); color: var(--gold-bright); font-size: 1.8rem; margin-bottom: 0.5rem;"></h3>
+            <div id="modal-subtitle" style="color: var(--peacock-bright); font-weight: 700; margin-bottom: 1rem;"></div>
+            <div id="modal-body" style="color: #E2D0B5; line-height: 1.6; font-size: 0.95rem; margin-bottom: 1.5rem;"></div>
+            <button class="btn-primary" style="width: 100%; padding: 0.8rem;" onclick="speakModalText()">📢 Listen to Story Narration</button>
+        </div>
+    </div>
+
+    <!-- REWARD CELEBRATION MODAL -->
+    <div class="modal-overlay" id="reward-modal">
+        <div class="modal-card" style="text-align: center;">
+            <button class="modal-close" onclick="closeRewardModal()">✖</button>
+            <div style="font-size: 4rem; margin-bottom: 0.5rem;" id="reward-modal-icon">🎁</div>
+            <h3 style="font-family: var(--font-title); color: var(--gold-bright); font-size: 2rem; margin-bottom: 0.5rem;" id="reward-modal-title">Quest Accomplished!</h3>
+            <p style="color: #00A896; font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem;" id="reward-modal-sub">You Unlocked a Divine Power!</p>
+            <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--gold-primary); padding: 1.2rem; border-radius: 12px; margin-bottom: 1.5rem; color: #E2D0B5; line-height: 1.5;" id="reward-modal-desc"></div>
+            <button class="btn-primary" style="width: 100%; padding: 0.9rem; font-size: 1rem;" onclick="closeRewardModal()">⚡ Claim Divine Power</button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        Sanskriti: Indian Culture & History Quest • Educational Learning Platform for Students
+    </footer>
+
+    <!-- GAME ENGINE & DATA SCRIPT -->
+    <script>
+        /* ==========================================
+           1. GAME DATA & EPIC BATTLES DEFINITIONS
+           ========================================== */
+        
+        const BATTLES_DATA = [
+            {
+                id: 'b_lanka',
+                title: 'The Battle of Lanka (Ramayana)',
+                sub: 'Lord Rama & Hanuman vs Ravana’s Forces',
+                desc: 'Lead Lord Rama and Hanuman’s Vanara Sena across the Sethu Bridge to triumph over evil and uphold Dharma.',
+                heroName: 'Lord Rama & Hanuman',
+                heroAvatar: '🏹',
+                enemyName: 'Demon King Ravana',
+                enemyAvatar: '👹',
+                bgStyle: 'lanka',
+                astras: [
+                    {
+                        name: '🏹 Brahmastra Bow Attack',
+                        question: 'What moral value does Lord Rama exemplify during the battle of Lanka?',
+                        options: ['Dharma (Righteousness) & Truth', 'Ego and pride', 'Deceit', 'Hate'],
+                        answer: 0,
+                        damage: 40,
+                        explanation: 'Lord Rama stands as the personification of Dharma (Maryada Purushottama).'
+                    },
+                    {
+                        name: '🐒 Hanuman Sanjeevani Shield',
+                        question: 'Which divine herb did Hanuman bring from the Himalayas to heal Lakshmana?',
+                        options: ['Neem', 'Sanjeevani Booti', 'Tulsi', 'Ashwagandha'],
+                        answer: 1,
+                        damage: 35,
+                        explanation: 'Hanuman lifted the entire Dronagiri mountain to bring Sanjeevani Booti.'
+                    }
+                ]
+            },
+            {
+                id: 'b_kurukshetra',
+                title: 'The Battle of Kurukshetra (Mahabharata)',
+                sub: 'Arjuna & Divine Charioteer Krishna on the Field of Dharma',
+                desc: 'Command Arjuna on his divine chariot guided by Lord Krishna, utilizing eternal Bhagavad Gita wisdom and Astra weapons.',
+                heroName: 'Arjuna & Krishna',
+                heroAvatar: '🛞',
+                enemyName: 'Kaurava Commanders',
+                enemyAvatar: '⚔️',
+                bgStyle: 'kurukshetra',
+                astras: [
+                    {
+                        name: '⚡ Gandiva Bow Surge',
+                        question: 'What is the core message taught by Lord Krishna to Arjuna in the Bhagavad Gita?',
+                        options: ['Flee from duty', 'Nishkama Karma (Perform your duty without attachment to results)', 'Seek fame', 'Hoard wealth'],
+                        answer: 1,
+                        explanation: 'Nishkama Karma emphasizes righteous action without selfish desire for outcomes.'
+                    },
+                    {
+                        name: '☸ Sudarshana Chakra Strike',
+                        question: 'Who served as Arjuna’s divine charioteer during the Mahabharata war?',
+                        options: ['Bheema', 'Lord Krishna', 'Yudhishthira', 'Karna'],
+                        answer: 1,
+                        explanation: 'Lord Krishna guided Arjuna’s chariot and delivered the sacred wisdom of the Gita.'
+                    }
+                ]
+            },
+            {
+                id: 'b_kalinga',
+                title: 'Battle of Kalinga & Ashoka’s Peace (History)',
+                sub: 'Emperor Ashoka’s Transformation to Ahimsa & Dharma Vijaya',
+                desc: 'Experience Emperor Ashoka’s turning point after the Kalinga war, trading violence for non-violence (Ahimsa) and global peace.',
+                heroName: 'Emperor Ashoka',
+                heroAvatar: '👑',
+                enemyName: 'Inner Conflict & Fortress',
+                enemyAvatar: '🛡️',
+                bgStyle: 'kalinga',
+                astras: [
+                    {
+                        name: '☸ Ashoka Chakra Edicts',
+                        question: 'What principle did Emperor Ashoka adopt after witnessing the tragedy of the Kalinga War?',
+                        options: ['Expansion of war', 'Ahimsa (Non-violence) and Dharma Vijaya', 'Isolation', 'Heavy taxation'],
+                        answer: 1,
+                        explanation: 'Ashoka renounced war and devoted his empire to Ahimsa (non-violence) and moral governance.'
+                    }
+                ]
+            }
+        ];
+
+        // Deities Data with realistic photographic image sources
+        const DEITIES_DATA = [
+            {
+                id: 'ganesha',
+                name: 'Lord Ganesha',
+                title: 'God of Wisdom & Remover of Obstacles',
+                domain: 'Wisdom, Intellect & New Beginnings',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Ganesha_Basohli_miniature_circa_1730_Dubost_p73.jpg/500px-Ganesha_Basohli_miniature_circa_1730_Dubost_p73.jpg',
+                imgFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Ganesha_statue_at_Dhakeshwari_Temple.jpg/400px-Ganesha_statue_at_Dhakeshwari_Temple.jpg',
+                svgFallback: `<svg viewBox="0 0 100 100" style="background:#4A0E17;"><circle cx="50" cy="45" r="30" fill="#E5C158"/><text x="50" y="85" fill="#FFDF00" font-size="10" text-anchor="middle">Ganesha</text></svg>`,
+                isSvg: false,
+                desc: 'Lord Ganesha is revered prior to the start of any major event or ritual. He holds a modak sweet and lotus flower, symbolizing sweetness of knowledge and purity.',
+                lore: 'In Indian tradition, Lord Ganesha wrote the epic Mahabharata as dictated by Sage Vyasa. His trunk represents adaptability and intellect. The festival of Ganesh Chaturthi celebrates his birth with vibrant joy.',
+                quiz: [
+                    {
+                        question: 'What sweet treat is traditionally associated as Lord Ganesha’s favorite?',
+                        options: ['Jalebi', 'Modak', 'Gulab Jamun', 'Kheer'],
+                        answer: 1,
+                        explanation: 'Modak is considered Lord Ganesha’s favorite sweet, representing the sweet reward of spiritual knowledge.'
+                    },
+                    {
+                        question: 'What does Lord Ganesha symbolize in Indian tradition?',
+                        options: ['War and battle', 'Remover of Obstacles & New Beginnings', 'Ocean and rivers', 'Sunlight'],
+                        answer: 1,
+                        explanation: 'Ganesha is invoked at the start of any new venture as the remover of obstacles (Vighnaharta).'
+                    }
+                ]
+            },
+            {
+                id: 'shiva',
+                name: 'Lord Shiva',
+                title: 'The Cosmic Dancer (Nataraja) & Destroyer of Evil',
+                domain: 'Cosmic Order, Meditation & Yoga',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Shiva_Nataraja_Angkor.jpg/400px-Shiva_Nataraja_Angkor.jpg',
+                imgFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Shiva_Parvati_Ellora.jpg/400px-Shiva_Parvati_Ellora.jpg',
+                svgFallback: `<svg viewBox="0 0 100 100" style="background:#0E5E6F;"><circle cx="50" cy="50" r="35" fill="none" stroke="#FFDF00" stroke-width="3"/><text x="50" y="92" fill="#FFF" font-size="10" text-anchor="middle">Shiva</text></svg>`,
+                isSvg: false,
+                desc: 'Lord Shiva as Nataraja performs the Ananda Tandava (Dance of Cosmic Bliss), balancing creation, preservation, and dissolution of the universe.',
+                lore: 'Shiva carries the Trishula (trident) representing the three aspects of time (past, present, future) and mind. The holy river Ganges flows from his locks, symbolizing spiritual rejuvenation.',
+                quiz: [
+                    {
+                        question: 'What is the name of Lord Shiva’s cosmic dance of creation and destruction?',
+                        options: ['Garba', 'Tandava', 'Kathak', 'Bhangra'],
+                        answer: 1,
+                        explanation: 'Tandava (or Ananda Tandava) is the divine cosmic dance performed by Shiva Nataraja.'
+                    },
+                    {
+                        question: 'What weapon does Lord Shiva carry?',
+                        options: ['Sudarshana Chakra', 'Trishula (Trident)', 'Bow & Arrow', 'Mace (Gada)'],
+                        answer: 1,
+                        explanation: 'The Trishula (trident) represents willpower, action, and knowledge.'
+                    }
+                ]
+            },
+            {
+                id: 'saraswati',
+                name: 'Goddess Saraswati',
+                title: 'Goddess of Knowledge, Music & Arts',
+                domain: 'Education, Wisdom & Fine Arts',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Goddess_Saraswati_Basohli_painting_circa_1730_Dubost_p71.jpg/400px-Goddess_Saraswati_Basohli_painting_circa_1730_Dubost_p71.jpg',
+                imgFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Saraswati_Pushkar.jpg/400px-Saraswati_Pushkar.jpg',
+                svgFallback: `<svg viewBox="0 0 100 100" style="background:#1A0A2A;"><text x="50" y="55" fill="#FFDF00" font-size="10" text-anchor="middle">Saraswati</text></svg>`,
+                isSvg: false,
+                desc: 'Goddess Saraswati is portrayed clad in white attire, playing the Veena while seated on a sacred lotus, symbolizing untainted pure knowledge.',
+                lore: 'Students and artists invoke Saraswati on Vasant Panchami. Her four hands symbolize the four aspects of human learning: mind, intellect, alertness, and ego.',
+                quiz: [
+                    {
+                        question: 'Which musical instrument is held by Goddess Saraswati?',
+                        options: ['Flute (Bansuri)', 'Sitar', 'Veena', 'Tabla'],
+                        answer: 2,
+                        explanation: 'The Veena symbolizes tune and harmony in life and music.'
+                    }
+                ]
+            },
+            {
+                id: 'krishna',
+                name: 'Lord Krishna',
+                title: 'Divine Guide of Bhagavad Gita & Flute Player',
+                domain: 'Compassion, Love & Wisdom',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Krishna_with_Flute.jpg/400px-Krishna_with_Flute.jpg',
+                imgFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Radha-Krishna_Kangra_Painting.jpg/400px-Radha-Krishna_Kangra_Painting.jpg',
+                svgFallback: `<svg viewBox="0 0 100 100" style="background:#051923;"><text x="50" y="55" fill="#FFDF00" font-size="10" text-anchor="middle">Krishna</text></svg>`,
+                isSvg: false,
+                desc: 'Lord Krishna is the central figure of the Bhagavad Gita, delivering eternal lessons of duty (Dharma) and selfless action.',
+                lore: 'Krishna’s flute tunes represent divine harmony that attracts all souls. His peacock feather crown signifies the beauty and majesty of nature.',
+                quiz: [
+                    {
+                        question: 'Which sacred scripture contains the philosophical discourse between Krishna and Arjuna?',
+                        options: ['Ramayana', 'Vedas', 'Bhagavad Gita', 'Upanishads'],
+                        answer: 2,
+                        explanation: 'The Bhagavad Gita is a 700-verse scripture that provides profound spiritual guidance.'
+                    }
+                ]
+            },
+            {
+                id: 'durga',
+                name: 'Goddess Durga',
+                title: 'Protector Mother & Warrior Goddess',
+                domain: 'Strength, Protection & Courage',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Durga_Puja_idol_at_College_Square_2013.jpg/400px-Durga_Puja_idol_at_College_Square_2013.jpg',
+                imgFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Goddess_Durga_on_lion.jpg/400px-Goddess_Durga_on_lion.jpg',
+                svgFallback: `<svg viewBox="0 0 100 100" style="background:#3B0B14;"><text x="50" y="55" fill="#FFDF00" font-size="10" text-anchor="middle">Durga</text></svg>`,
+                isSvg: false,
+                desc: 'Goddess Durga rides a lion and wields divine weapons to protect righteousness and vanquish evil forces.',
+                lore: 'The nine-night festival of Navratri celebrates Goddess Durga’s triumph over the demon Mahishasura, symbolizing light defeating darkness.',
+                quiz: [
+                    {
+                        question: 'Which major festival celebrates Goddess Durga’s victory over evil?',
+                        options: ['Holi', 'Navratri / Durga Puja', 'Diwali', 'Makar Sankranti'],
+                        answer: 1,
+                        explanation: 'Navratri and Durga Puja honor Durga’s courage and divine power.'
+                    }
+                ]
+            },
+            {
+                id: 'vishnu',
+                name: 'Lord Vishnu',
+                title: 'Preserver of Universe & Dharma',
+                domain: 'Preservation, Harmony & Order',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Vishnu_Tribhanga_Bhuvaneshvara.jpg/400px-Vishnu_Tribhanga_Bhuvaneshvara.jpg',
+                imgFallback: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Vishnu_and_Lakshmi_on_Shesha_Naga.jpg/400px-Vishnu_and_Lakshmi_on_Shesha_Naga.jpg',
+                svgFallback: `<svg viewBox="0 0 100 100" style="background:#0A1128;"><text x="50" y="55" fill="#FFDF00" font-size="10" text-anchor="middle">Vishnu</text></svg>`,
+                isSvg: false,
+                desc: 'Lord Vishnu preserves cosmic harmony and incarnates across eras to restore balance whenever righteousness declines.',
+                lore: 'Vishnu holds the Sudarshana Chakra (discus) and Shankha (conch shell). His ten main incarnations are known as the Dashavatara.',
+                quiz: [
+                    {
+                        question: 'What is the collective name for Lord Vishnu’s ten major incarnations?',
+                        options: ['Trimurti', 'Dashavatara', 'Navaratna', 'Mahabharata'],
+                        answer: 1,
+                        explanation: 'Dashavatara refers to the ten avatars of Lord Vishnu including Rama and Krishna.'
+                    }
+                ]
+            }
+        ];
+
+        // Quests & Tasks Definitions
+        const QUESTS_DATA = [
+            {
+                id: 'q_deities',
+                title: 'Master of Divine Wisdom',
+                desc: 'Answer 2 Deity Trivia Quizzes correctly to unlock the 🔮 Third-Eye Vision Hint Power!',
+                target: 2,
+                currentKey: 'correctDeityQuizzes',
+                rewardId: 'hint',
+                rewardIcon: '🔮',
+                rewardName: 'Third-Eye Vision (1-Option Eliminator)',
+                rewardDesc: 'Eliminates 1 or 2 wrong choices in any Deity or History quiz!'
+            },
+            {
+                id: 'q_reels',
+                title: 'Chronicle Time Traveler',
+                desc: 'Watch 2 Historical Video Reels to unlock the ⚡ Saffron Surge (2x Points) Power!',
+                target: 2,
+                currentKey: 'watchedReelsCount',
+                rewardId: '2x',
+                rewardIcon: '⚡',
+                rewardName: 'Saffron Surge (2x Points Multiplier)',
+                rewardDesc: 'Doubles all score points gained for 60 seconds!'
+            },
+            {
+                id: 'q_memory',
+                title: 'Heritage Memory Sage',
+                desc: 'Complete a Heritage Memory Match game to unlock 👁️ Chakra Sight!',
+                target: 1,
+                currentKey: 'completedMemoryGames',
+                rewardId: 'peek',
+                rewardIcon: '👁️',
+                rewardName: 'Chakra Sight (Card Peek Power)',
+                rewardDesc: 'Briefly flips all memory cards face-up for 2 seconds!'
+            },
+            {
+                id: 'q_encyclopedia',
+                title: 'Cultural Gyan Explorer',
+                desc: 'Read 2 Gyan Kosh Encyclopedia articles to unlock 🛡️ Shield of Dharma!',
+                target: 2,
+                currentKey: 'readArticlesCount',
+                rewardId: 'shield',
+                rewardIcon: '🛡️',
+                rewardName: 'Shield of Dharma (Streak Shield)',
+                rewardDesc: 'Protects your streak from breaking on 1 incorrect quiz answer!'
+            }
+        ];
+
+        // History Eras Data with canvas reel scenes & narration
+        const ERAS_DATA = [
+            {
+                id: 'vedic',
+                name: 'Vedic Era',
+                period: 'c. 1500 – 500 BCE',
+                desc: 'The foundation of Indian philosophy, mathematics, and spiritual hymns. Sage scholars composed the Rigveda, Samaveda, Yajurveda, and Atharvaveda.',
+                bullets: [
+                    'Composition of the 4 Sacred Vedas & Upanishads.',
+                    'Development of Sanskrit literature and early astronomy.',
+                    'Harmonious living with nature and Gurukul learning centers.'
+                ],
+                bgColor: '#3B0B14',
+                reelAnimationType: 'vedic_fire',
+                quiz: {
+                    question: 'How many primary Vedas were composed during the Vedic Era?',
+                    options: ['Two (2)', 'Four (4)', 'Six (6)', 'Ten (10)'],
+                    answer: 1,
+                    explanation: 'The four Vedas are Rigveda, Samaveda, Yajurveda, and Atharvaveda.'
+                }
+            },
+            {
+                id: 'maurya',
+                name: 'Maurya Empire',
+                period: 'c. 322 – 185 BCE',
+                desc: 'Unified most of the Indian subcontinent under Chandragupta Maurya and Emperor Ashoka. Known for rock edicts, diplomacy (Chanakya’s Arthashastra), and peace.',
+                bullets: [
+                    'Emperor Ashoka erected the Ashoka Pillars & Sarnath Lion Capital.',
+                    'Chanakya wrote Arthashastra, pioneering governance & economics.',
+                    'Spread of Ahimsa (non-violence) and Buddhist edicts across Asia.'
+                ],
+                bgColor: '#0E5E6F',
+                reelAnimationType: 'maurya_pillar',
+                quiz: {
+                    question: 'Which famous ancient advisor authored the treatise Arthashastra during the Mauryan Era?',
+                    options: ['Kalidasa', 'Chanakya (Kautilya)', 'Aryabhata', 'Tenali Rama'],
+                    answer: 1,
+                    explanation: 'Chanakya served as chief advisor to Emperor Chandragupta Maurya and wrote the Arthashastra.'
+                }
+            },
+            {
+                id: 'gupta',
+                name: 'Gupta Golden Age',
+                period: 'c. 320 – 550 CE',
+                desc: 'The Golden Age of Indian science, mathematics, and arts. Mathematician Aryabhata invented the concept of zero and calculated planetary orbits.',
+                bullets: [
+                    'Invention of Zero (0) and decimal system by Indian mathematicians.',
+                    'Nalanda University became a global center for international scholars.',
+                    'Ajanta cave paintings and classical Sanskrit literature flourished.'
+                ],
+                bgColor: '#4A2800',
+                reelAnimationType: 'gupta_stars',
+                quiz: {
+                    question: 'Which legendary mathematician from the Gupta Golden Age introduced the concept of zero?',
+                    options: ['Varahamihira', 'Aryabhata', 'Bhaskara', 'Charaka'],
+                    answer: 1,
+                    explanation: 'Aryabhata was an astronomer-mathematician who formulated zero and revolutionary mathematical principles.'
+                }
+            },
+            {
+                id: 'chola',
+                name: 'Chola Dynasty',
+                period: 'c. 848 – 1279 CE',
+                desc: 'Maritime empire renowned for architectural marvels like the Brihadeeswarar Temple in Thanjavur and bronze Nataraja sculptures.',
+                bullets: [
+                    'Built monolithic granite temples engineered without mortar.',
+                    'Pioneered advanced maritime trade routes across South-East Asia.',
+                    'Mastered lost-wax bronze casting for sacred temple idols.'
+                ],
+                bgColor: '#1A3300',
+                reelAnimationType: 'chola_temple',
+                quiz: {
+                    question: 'What material was primarily used to build the monumental Brihadeeswarar Temple by the Cholas?',
+                    options: ['Wood', 'Solid Granite', 'Mud Bricks', 'Marble'],
+                    answer: 1,
+                    explanation: 'The Brihadeeswarar Temple is built entirely of solid granite, showcasing extraordinary Chola engineering.'
+                }
+            },
+            {
+                id: 'vijayanagara',
+                name: 'Vijayanagara Empire',
+                period: 'c. 1336 – 1646 CE',
+                desc: 'A glorious era of art, literature, and architectural splendour centered in Hampi, Karnataka under King Krishnadevaraya.',
+                bullets: [
+                    'Iconic Stone Chariot & Vitthala Temple musical pillars in Hampi.',
+                    'Patronage of Telugu, Kannada, and Sanskrit classical literature.',
+                    'Thriving international markets trading diamonds and spices.'
+                ],
+                bgColor: '#5C1D00',
+                reelAnimationType: 'hampi_chariot',
+                quiz: {
+                    question: 'In which famous UNESCO heritage site located in Karnataka can you see the famous Stone Chariot?',
+                    options: ['Hampi', 'Madurai', 'Varanasi', 'Jaipur'],
+                    answer: 0,
+                    explanation: 'Hampi was the majestic capital of the Vijayanagara Empire, famed for its Stone Chariot.'
+                }
+            }
+        ];
+
+        // Memory Match Game Cards Data
+        const MEMORY_CARDS_DATA = [
+            { id: '1', title: 'Bharatanatyam', icon: '💃' },
+            { id: '2', title: 'Hampi Chariot', icon: '🛕' },
+            { id: '3', title: 'Kathakali', icon: '🎭' },
+            { id: '4', title: 'Sacred Diya', icon: '🪔' },
+            { id: '5', title: 'Lotus Flower', icon: '🪷' },
+            { id: '6', title: 'Ashoka Chakra', icon: '☸' }
+        ];
+
+        // Badges List
+        const BADGES_LIST = [
+            { id: 'b_deity', name: 'Deity Scholar', desc: 'Answered a Deity quiz correctly', icon: '🛕' },
+            { id: 'b_historian', name: 'Reel Historian', desc: 'Watched a historical video reel', icon: '🎬' },
+            { id: 'b_memory', name: 'Heritage Master', desc: 'Completed the Memory Match game', icon: '🧩' },
+            { id: 'b_streak', name: 'Streak Champion', desc: 'Achieved a 3x answer streak', icon: '🔥' },
+            { id: 'b_warrior', name: 'Dharma Hero', desc: 'Won an Epic Battle of Ramayana / Mahabharata', icon: '⚔️' }
+        ];
+
+        /* ==========================================
+           2. APP STATE MANAGEMENT
+           ========================================== */
+        let state = {
+            score: 0,
+            streak: 0,
+            unlockedBadges: new Set(),
+            unlockedPowers: new Set(),
+            activePower: null,
+            taskStats: {
+                correctDeityQuizzes: 0,
+                watchedReelsCount: 0,
+                completedMemoryGames: 0,
+                readArticlesCount: 0
+            },
+            claimedQuests: new Set(),
+            activeBattle: null,
+            heroHP: 100,
+            enemyHP: 100,
+            currentAstraIdx: 0,
+            currentDeityQuizIdx: 0,
+            activeEraIdx: 0,
+            isReelPlaying: false,
+            reelProgress: 0,
+            reelAnimFrame: null,
+            audioSynthActive: false,
+            memoryCards: [],
+            flippedCards: [],
+            matchedPairs: 0,
+            moves: 0,
+            speechSynth: window.speechSynthesis
+        };
+
+        /* ==========================================
+           3. INITIALIZATION & TAB SWITCHING
+           ========================================== */
+        window.addEventListener('DOMContentLoaded', () => {
+            renderBattles();
+            renderQuests();
+            renderDeityCards();
+            renderEraTimeline();
+            initMemoryGame();
+            loadEncyclopediaTopic('epics');
+            renderBadges();
+            selectEra(0);
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.game-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetSection = document.getElementById(`section-${tabId}`);
+            if (targetSection) targetSection.classList.add('active');
+
+            const activeNavBtn = Array.from(document.querySelectorAll('.nav-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
+            if (activeNavBtn) activeNavBtn.classList.add('active');
+
+            if (tabId === 'history') {
+                drawReelCanvas();
+            } else if (tabId === 'battles' && state.activeBattle) {
+                drawBattleCanvas();
+            }
+        }
+
+        /* ==========================================
+           4. EPIC BATTLES OF DHARMA LOGIC & CANVAS 2D GRAPHICS
+           ========================================== */
+        function renderBattles() {
+            const container = document.getElementById('battle-select-container');
+            container.innerHTML = '';
+
+            BATTLES_DATA.forEach((b, idx) => {
+                const card = document.createElement('div');
+                card.className = 'battle-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="battle-card-title">${b.title}</div>
+                        <div class="battle-card-sub">${b.sub}</div>
+                        <p class="battle-card-desc">${b.desc}</p>
+                    </div>
+                    <button class="btn-primary" style="padding: 0.8rem;" onclick="startEpicBattle(${idx})">⚔️ Enter Battle</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function startEpicBattle(bIdx) {
+            state.activeBattle = BATTLES_DATA[bIdx];
+            state.heroHP = 100;
+            state.enemyHP = 100;
+            state.currentAstraIdx = 0;
+
+            document.getElementById('hero-name').innerText = state.activeBattle.heroName;
+            document.getElementById('hero-avatar').innerText = state.activeBattle.heroAvatar;
+            document.getElementById('enemy-name').innerText = state.activeBattle.enemyName;
+            document.getElementById('enemy-avatar').innerText = state.activeBattle.enemyAvatar;
+
+            document.getElementById('hero-hp-bar').style.width = '100%';
+            document.getElementById('enemy-hp-bar').style.width = '100%';
+
+            const arena = document.getElementById('battle-arena');
+            arena.style.display = 'block';
+            arena.scrollIntoView({ behavior: 'smooth' });
+
+            drawBattleCanvas();
+            loadAstraAction();
+        }
+
+        function loadAstraAction() {
+            const b = state.activeBattle;
+            if (!b || !b.astras[state.currentAstraIdx]) return;
+
+            const astra = b.astras[state.currentAstraIdx];
+            document.getElementById('battle-tactical-question').innerHTML = `
+                <strong style="color:var(--gold-bright); font-size:1.1rem;">⚡ Tactical Dilemma:</strong><br>
+                ${astra.question}
+            `;
+
+            const container = document.getElementById('battle-actions-container');
+            container.innerHTML = '';
+
+            astra.options.forEach((optText, oIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-astra';
+                btn.innerText = optText;
+                btn.onclick = () => executeAstraAttack(oIdx, astra);
+                container.appendChild(btn);
+            });
+        }
+
+        function executeAstraAttack(selectedIdx, astra) {
+            if (selectedIdx === astra.answer) {
+                state.enemyHP = Math.max(0, state.enemyHP - astra.damage);
+                document.getElementById('enemy-hp-bar').style.width = `${state.enemyHP}%`;
+                
+                let pts = 200;
+                if (state.activePower === '2x') pts *= 2;
+                addScore(pts);
+
+                playTone(700, 'sine', 0.3);
+                animateBattleProjectile(true);
+
+                if (state.enemyHP <= 0) {
+                    unlockBadge('b_warrior');
+                    setTimeout(() => {
+                        alert(`🎉 VICTORY! You won ${state.activeBattle.title} and upheld Dharma!`);
+                        document.getElementById('battle-arena').style.display = 'none';
+                    }, 600);
+                } else {
+                    state.currentAstraIdx = (state.currentAstraIdx + 1) % state.activeBattle.astras.length;
+                    setTimeout(loadAstraAction, 1000);
+                }
+            } else {
+                state.heroHP = Math.max(0, state.heroHP - 25);
+                document.getElementById('hero-hp-bar').style.width = `${state.heroHP}%`;
+                playTone(200, 'sawtooth', 0.3);
+                animateBattleProjectile(false);
+
+                alert(`❌ Tactical setback! ${astra.explanation}`);
+                if (state.heroHP <= 0) {
+                    alert('🛡️ Your forces regrouped. Restart the battle to try again!');
+                    document.getElementById('battle-arena').style.display = 'none';
+                }
+            }
+        }
+
+        function animateBattleProjectile(isHeroSuccess) {
+            const canvas = document.getElementById('battle-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let pX = isHeroSuccess ? 220 : canvas.width - 220;
+            const targetX = isHeroSuccess ? canvas.width - 200 : 200;
+
+            function anim() {
+                drawBattleCanvas();
+
+                // Projectile Glowing Streak
+                ctx.save();
+                ctx.fillStyle = isHeroSuccess ? '#FFDF00' : '#FF4D4D';
+                ctx.shadowColor = isHeroSuccess ? '#FFDF00' : '#FF0000';
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.arc(pX, canvas.height / 2 + 10, 16, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                pX += isHeroSuccess ? 22 : -22;
+                if ((isHeroSuccess && pX < targetX) || (!isHeroSuccess && pX > targetX)) {
+                    requestAnimationFrame(anim);
+                }
+            }
+            anim();
+        }
+
+        /* VIRTUAL BODY & EPIC BACKGROUND DRAWING ENGINE */
+        function drawBattleCanvas() {
+            const canvas = document.getElementById('battle-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const bgStyle = state.activeBattle ? state.activeBattle.bgStyle : 'lanka';
+            const W = canvas.width, H = canvas.height;
+            const t = Date.now() * 0.001;
+
+            // === REALISTIC PHOTOGRAPHIC BACKGROUNDS ===
+            if (bgStyle === 'lanka') {
+                // Lanka: Deep crimson fiery sky with layered atmospheric depth
+                const sky = ctx.createLinearGradient(0, 0, 0, H);
+                sky.addColorStop(0, '#0D0005');
+                sky.addColorStop(0.25, '#5C0D1B');
+                sky.addColorStop(0.55, '#C42A00');
+                sky.addColorStop(0.75, '#FF6B00');
+                sky.addColorStop(1, '#1A0409');
+                ctx.fillStyle = sky;
+                ctx.fillRect(0, 0, W, H);
+
+                // Sun disc (setting sun)
+                const sunGlow = ctx.createRadialGradient(W/2, H*0.5, 10, W/2, H*0.5, 80);
+                sunGlow.addColorStop(0, 'rgba(255,200,50,0.9)');
+                sunGlow.addColorStop(0.4, 'rgba(255,100,0,0.5)');
+                sunGlow.addColorStop(1, 'rgba(255,100,0,0)');
+                ctx.fillStyle = sunGlow;
+                ctx.beginPath(); ctx.arc(W/2, H*0.5, 80, 0, Math.PI*2); ctx.fill();
+
+                // Distant fortress walls (dark silhouette)
+                ctx.fillStyle = '#1A0408';
+                // Left mountain
+                ctx.beginPath();
+                ctx.moveTo(0, H); ctx.lineTo(0, H*0.55); ctx.lineTo(80, H*0.35);
+                ctx.lineTo(160, H*0.5); ctx.lineTo(200, H*0.4); ctx.lineTo(260, H*0.55);
+                ctx.lineTo(300, H); ctx.fill();
+                // Right mountain
+                ctx.beginPath();
+                ctx.moveTo(W, H); ctx.lineTo(W, H*0.5); ctx.lineTo(W-80, H*0.3);
+                ctx.lineTo(W-160, H*0.45); ctx.lineTo(W-200, H*0.38); ctx.lineTo(W-260, H*0.55);
+                ctx.lineTo(W-300, H); ctx.fill();
+                // Center fortress towers
+                ctx.fillStyle = '#26040A';
+                ctx.fillRect(W*0.4, H*0.35, 25, H*0.35);
+                ctx.fillRect(W*0.5-12, H*0.25, 25, H*0.45);
+                ctx.fillRect(W*0.6, H*0.32, 20, H*0.38);
+                // Tower tops (battlements)
+                [[W*0.4,H*0.35],[W*0.5-12,H*0.25],[W*0.6,H*0.32]].forEach(([tx,ty]) => {
+                    for (let i = 0; i < 4; i++) ctx.fillRect(tx + i*7, ty - 10, 5, 12);
+                });
+
+                // Fire glow on horizon
+                const fireGlow = ctx.createLinearGradient(0, H*0.7, 0, H);
+                fireGlow.addColorStop(0, 'rgba(255,60,0,0.4)');
+                fireGlow.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = fireGlow;
+                ctx.fillRect(0, H*0.65, W, H*0.35);
+
+                // Ocean
+                ctx.fillStyle = '#0A1E3C';
+                ctx.fillRect(0, H-38, W, 38);
+                ctx.fillStyle = 'rgba(100,180,255,0.2)';
+                for (let wx = 0; wx < W; wx += 60) {
+                    ctx.beginPath();
+                    ctx.arc(wx + Math.sin(t+wx)*10, H-28, 20, Math.PI, 0);
+                    ctx.fill();
+                }
+
+            } else if (bgStyle === 'kurukshetra') {
+                // Kurukshetra: Golden dusk dusty battlefield
+                const sky = ctx.createLinearGradient(0, 0, 0, H);
+                sky.addColorStop(0, '#060209');
+                sky.addColorStop(0.3, '#3B1500');
+                sky.addColorStop(0.6, '#9A4400');
+                sky.addColorStop(0.75, '#E5A000');
+                sky.addColorStop(1, '#2A1000');
+                ctx.fillStyle = sky;
+                ctx.fillRect(0, 0, W, H);
+
+                // Setting sun
+                const sunG = ctx.createRadialGradient(W*0.75, H*0.42, 5, W*0.75, H*0.42, 60);
+                sunG.addColorStop(0, 'rgba(255,220,80,1)');
+                sunG.addColorStop(0.5, 'rgba(255,150,30,0.6)');
+                sunG.addColorStop(1, 'rgba(255,80,0,0)');
+                ctx.fillStyle = sunG;
+                ctx.beginPath(); ctx.arc(W*0.75, H*0.42, 60, 0, Math.PI*2); ctx.fill();
+
+                // Dust cloud layer across mid-horizon
+                const dust = ctx.createLinearGradient(0, H*0.6, 0, H*0.8);
+                dust.addColorStop(0, 'rgba(200,120,30,0)');
+                dust.addColorStop(0.5, 'rgba(180,100,20,0.35)');
+                dust.addColorStop(1, 'rgba(160,80,10,0)');
+                ctx.fillStyle = dust;
+                ctx.fillRect(0, H*0.55, W, H*0.3);
+
+                // Chariot wheel silhouettes in horizon
+                ctx.strokeStyle = '#5A2800';
+                ctx.lineWidth = 4;
+                [W*0.2, W*0.5, W*0.8].forEach((cx, i) => {
+                    ctx.beginPath();
+                    ctx.arc(cx, H*0.68 + Math.sin(t+i)*4, 35, 0, Math.PI*2);
+                    ctx.stroke();
+                    // Spokes
+                    for (let s = 0; s < 8; s++) {
+                        const angle = (s/8)*Math.PI*2 + t*0.3;
+                        ctx.beginPath();
+                        ctx.moveTo(cx, H*0.68 + Math.sin(t+i)*4);
+                        ctx.lineTo(cx + Math.cos(angle)*35, H*0.68 + Math.sin(t+i)*4 + Math.sin(angle)*35);
+                        ctx.stroke();
+                    }
+                });
+
+                // Ground with dust
+                const ground = ctx.createLinearGradient(0, H*0.72, 0, H);
+                ground.addColorStop(0, '#4A2200');
+                ground.addColorStop(1, '#1A0800');
+                ctx.fillStyle = ground;
+                ctx.fillRect(0, H*0.72, W, H*0.28);
+
+                // War banners
+                ctx.fillStyle = '#B50000';
+                [[W*0.3, H*0.5],[W*0.7, H*0.5]].forEach(([bx, by]) => {
+                    ctx.fillRect(bx-2, by, 4, 100);
+                    ctx.beginPath();
+                    ctx.moveTo(bx, by); ctx.lineTo(bx+30, by+15); ctx.lineTo(bx, by+30); ctx.fill();
+                });
+
+            } else {
+                // Kalinga: Dark teal imperial Mauryan night with moonlit pillars
+                const sky = ctx.createLinearGradient(0, 0, 0, H);
+                sky.addColorStop(0, '#020A0D');
+                sky.addColorStop(0.4, '#0A2030');
+                sky.addColorStop(0.7, '#0E3A4A');
+                sky.addColorStop(1, '#051015');
+                ctx.fillStyle = sky;
+                ctx.fillRect(0, 0, W, H);
+
+                // Moon
+                const moonG = ctx.createRadialGradient(W*0.8, 60, 5, W*0.8, 60, 45);
+                moonG.addColorStop(0, 'rgba(240,240,220,1)');
+                moonG.addColorStop(0.6, 'rgba(220,220,190,0.7)');
+                moonG.addColorStop(1, 'rgba(200,220,255,0)');
+                ctx.fillStyle = moonG;
+                ctx.beginPath(); ctx.arc(W*0.8, 60, 45, 0, Math.PI*2); ctx.fill();
+
+                // Stars
+                ctx.fillStyle = 'rgba(255,255,240,0.8)';
+                [[W*0.1,30],[W*0.3,50],[W*0.55,25],[W*0.65,80],[W*0.2,70],[W*0.4,15]].forEach(([sx,sy]) => {
+                    ctx.beginPath(); ctx.arc(sx, sy + Math.sin(t+sx)*1.5, 2, 0, Math.PI*2); ctx.fill();
+                });
+
+                // Imperial Ashoka Pillars (detailed)
+                const pillars = [[100, H*0.2, 30, H*0.6], [W/2-15, H*0.12, 35, H*0.7], [W-130, H*0.2, 30, H*0.6]];
+                pillars.forEach(([px, py, pw, ph]) => {
+                    // Pillar body gradient
+                    const pGrad = ctx.createLinearGradient(px, 0, px+pw, 0);
+                    pGrad.addColorStop(0, '#081820');
+                    pGrad.addColorStop(0.3, '#0E3040');
+                    pGrad.addColorStop(0.7, '#0E3040');
+                    pGrad.addColorStop(1, '#040E14');
+                    ctx.fillStyle = pGrad;
+                    ctx.fillRect(px, py, pw, ph);
+                    // Lion capital at top
+                    ctx.fillStyle = '#0E3A4A';
+                    ctx.beginPath();
+                    ctx.arc(px + pw/2, py, pw*0.7, 0, Math.PI*2);
+                    ctx.fill();
+                    // Ashoka Chakra at top
+                    ctx.strokeStyle = 'rgba(100,200,255,0.4)';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(px + pw/2, py, pw*0.55, 0, Math.PI*2);
+                    ctx.stroke();
+                });
+
+                // Ground reflection
+                const groundG = ctx.createLinearGradient(0, H*0.8, 0, H);
+                groundG.addColorStop(0, '#051520');
+                groundG.addColorStop(1, '#020A0D');
+                ctx.fillStyle = groundG;
+                ctx.fillRect(0, H*0.8, W, H*0.2);
+            }
+
+            // 2. Draw Realistic Hero Body (Left Side)
+            ctx.save();
+            const heroX = 180, heroY = 240;
+            const heroImg = document.getElementById('hero-portrait-img');
+
+            // === REALISTIC HERO FIGURE ===
+            // Golden Aura
+            const heroAura = ctx.createRadialGradient(heroX, heroY-30, 10, heroX, heroY-30, 80);
+            heroAura.addColorStop(0, 'rgba(255,223,0,0.3)');
+            heroAura.addColorStop(1, 'rgba(255,223,0,0)');
+            ctx.fillStyle = heroAura;
+            ctx.beginPath(); ctx.arc(heroX, heroY-30, 80, 0, Math.PI*2); ctx.fill();
+
+            // Legs
+            ctx.fillStyle = '#2A5F8F'; ctx.shadowColor = '#0A2A40'; ctx.shadowBlur = 5;
+            ctx.fillRect(heroX - 18, heroY + 70, 16, 75); // left leg
+            ctx.fillRect(heroX + 2, heroY + 70, 16, 75);  // right leg
+            // Boots
+            ctx.fillStyle = '#1A2A10';
+            ctx.fillRect(heroX - 22, heroY + 130, 22, 16); // left boot
+            ctx.fillRect(heroX + 0, heroY + 130, 22, 16);  // right boot
+
+            // Torso / Armor
+            const tGrad = ctx.createLinearGradient(heroX-30, heroY, heroX+30, heroY);
+            tGrad.addColorStop(0, '#B8860B'); tGrad.addColorStop(0.5, '#FFD700'); tGrad.addColorStop(1, '#B8860B');
+            ctx.fillStyle = tGrad;
+            ctx.fillRect(heroX - 28, heroY, 56, 72);
+            // Armor lines detail
+            ctx.strokeStyle = '#8B6914'; ctx.lineWidth = 2;
+            ctx.strokeRect(heroX-28, heroY, 56, 72);
+            ctx.beginPath(); ctx.moveTo(heroX, heroY); ctx.lineTo(heroX, heroY+72); ctx.stroke();
+            // Sash / Belt
+            ctx.fillStyle = '#FF6B00';
+            ctx.fillRect(heroX - 30, heroY + 52, 60, 10);
+
+            // Left Arm (holding bow)
+            ctx.fillStyle = '#D4A060'; ctx.shadowColor = '#FFDF00'; ctx.shadowBlur = 10;
+            ctx.fillRect(heroX - 50, heroY + 5, 22, 15); // upper left arm
+            ctx.fillRect(heroX - 52, heroY + 18, 18, 45); // forearm
+
+            // Right Arm (pulling bowstring)
+            ctx.fillStyle = '#D4A060';
+            ctx.fillRect(heroX + 28, heroY + 5, 22, 15); // upper right arm
+            ctx.fillRect(heroX + 34, heroY + 18, 18, 45); // forearm
+
+            // Bow (golden arc)
+            ctx.shadowColor = '#FFDF00'; ctx.shadowBlur = 15;
+            ctx.strokeStyle = '#FFD700'; ctx.lineWidth = 5;
+            ctx.beginPath(); ctx.arc(heroX - 35, heroY + 30, 50, -0.9, 0.9); ctx.stroke();
+            // Bowstring
+            ctx.strokeStyle = '#FFF9DC'; ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(heroX - 35, heroY - 18); ctx.lineTo(heroX + 30, heroY + 30); ctx.lineTo(heroX - 35, heroY + 78);
+            ctx.stroke();
+            // Arrow
+            ctx.strokeStyle = '#C0C0C0'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(heroX - 35, heroY + 30); ctx.lineTo(heroX + 28, heroY + 30); ctx.stroke();
+            ctx.fillStyle = '#FFDF00'; ctx.beginPath();
+            ctx.moveTo(heroX + 28, heroY + 27); ctx.lineTo(heroX + 38, heroY + 30); ctx.lineTo(heroX + 28, heroY + 33);
+            ctx.fill();
+
+            ctx.shadowBlur = 0;
+
+            // Head
+            ctx.fillStyle = '#D4A060'; ctx.shadowColor = 'transparent';
+            ctx.beginPath(); ctx.arc(heroX, heroY - 22, 24, 0, Math.PI*2); ctx.fill();
+            // Face features
+            ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(heroX-8, heroY-26, 3, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(heroX+8, heroY-26, 3, 0, Math.PI*2); ctx.fill();
+            ctx.strokeStyle = '#8B5520'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(heroX, heroY-12, 8, 0.2, Math.PI-0.2); ctx.stroke(); // smile
+            // Tilak on forehead
+            ctx.fillStyle = '#FF4500';
+            ctx.fillRect(heroX - 2, heroY - 42, 4, 10);
+            ctx.fillStyle = '#FFDF00'; ctx.fillRect(heroX - 4, heroY - 43, 8, 3);
+
+            // Crown / Mukut (detailed)
+            ctx.shadowColor = '#FFDF00'; ctx.shadowBlur = 12;
+            const crownGrad = ctx.createLinearGradient(heroX-30, heroY-65, heroX+30, heroY-45);
+            crownGrad.addColorStop(0, '#B8860B'); crownGrad.addColorStop(0.5, '#FFDF00'); crownGrad.addColorStop(1, '#B8860B');
+            ctx.fillStyle = crownGrad;
+            // Crown base
+            ctx.fillRect(heroX - 28, heroY - 47, 56, 8);
+            // Crown peaks
+            ctx.beginPath(); ctx.moveTo(heroX-28,heroY-47); ctx.lineTo(heroX-20,heroY-72); ctx.lineTo(heroX-12,heroY-47); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(heroX-12,heroY-47); ctx.lineTo(heroX,heroY-80); ctx.lineTo(heroX+12,heroY-47); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(heroX+12,heroY-47); ctx.lineTo(heroX+20,heroY-72); ctx.lineTo(heroX+28,heroY-47); ctx.fill();
+            // Peacock feather on crown
+            ctx.fillStyle = '#00A896';
+            ctx.beginPath(); ctx.ellipse(heroX, heroY-82, 6, 20, 0, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#003D30';
+            ctx.beginPath(); ctx.ellipse(heroX, heroY-90, 3, 8, 0, 0, Math.PI*2); ctx.fill();
+
+            ctx.shadowBlur = 0;
+            ctx.restore();
+
+            // Hero Label
+            ctx.save();
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillRect(heroX-60, heroY+155, 120, 26);
+            ctx.fillStyle = '#FFDF00';
+            ctx.font = 'bold 13px Cinzel, serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(state.activeBattle?.heroName || 'Hero', heroX, heroY+173);
+            ctx.restore();
+
+            // 3. Draw Realistic Enemy Body (Right Side)
+            ctx.save();
+            const enemyX = W - 180, enemyY = 230;
+
+            // Dark Crimson Aura
+            const enemyAura = ctx.createRadialGradient(enemyX, enemyY-30, 10, enemyX, enemyY-30, 90);
+            enemyAura.addColorStop(0, 'rgba(255,0,0,0.25)');
+            enemyAura.addColorStop(1, 'rgba(255,0,0,0)');
+            ctx.fillStyle = enemyAura;
+            ctx.beginPath(); ctx.arc(enemyX, enemyY-30, 90, 0, Math.PI*2); ctx.fill();
+
+            // Legs
+            ctx.fillStyle = '#3A0810'; ctx.shadowColor = '#FF0000'; ctx.shadowBlur = 8;
+            ctx.fillRect(enemyX - 22, enemyY + 75, 18, 80);
+            ctx.fillRect(enemyX + 4, enemyY + 75, 18, 80);
+            // Boots
+            ctx.fillStyle = '#1A0408';
+            ctx.fillRect(enemyX - 28, enemyY + 140, 26, 16);
+            ctx.fillRect(enemyX + 2, enemyY + 140, 26, 16);
+
+            // Torso / Dark Armor
+            const eGrad = ctx.createLinearGradient(enemyX-35, enemyY, enemyX+35, enemyY);
+            eGrad.addColorStop(0, '#3A0810'); eGrad.addColorStop(0.5, '#8B1A28'); eGrad.addColorStop(1, '#3A0810');
+            ctx.fillStyle = eGrad;
+            ctx.fillRect(enemyX - 32, enemyY, 64, 78);
+            ctx.strokeStyle = '#5A0A18'; ctx.lineWidth = 2;
+            ctx.strokeRect(enemyX-32, enemyY, 64, 78);
+            ctx.beginPath(); ctx.moveTo(enemyX, enemyY); ctx.lineTo(enemyX, enemyY+78); ctx.stroke();
+
+            // Left Arm
+            ctx.fillStyle = '#8B4513'; ctx.shadowColor = '#FF0000'; ctx.shadowBlur = 5;
+            ctx.fillRect(enemyX - 56, enemyY + 5, 24, 18);
+            ctx.fillRect(enemyX - 58, enemyY + 20, 20, 50);
+            // Right Arm (with spear)
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(enemyX + 32, enemyY + 5, 24, 18);
+            ctx.fillRect(enemyX + 38, enemyY + 20, 20, 50);
+
+            // Spear
+            ctx.shadowColor = '#FF0000'; ctx.shadowBlur = 10;
+            ctx.strokeStyle = '#8B1A28'; ctx.lineWidth = 6;
+            ctx.beginPath(); ctx.moveTo(enemyX + 50, enemyY - 50); ctx.lineTo(enemyX + 35, enemyY + 140); ctx.stroke();
+            // Spearhead
+            ctx.fillStyle = '#C0C0C0';
+            ctx.beginPath(); ctx.moveTo(enemyX + 50, enemyY-50); ctx.lineTo(enemyX + 42, enemyY-25); ctx.lineTo(enemyX + 58, enemyY-25); ctx.fill();
+
+            ctx.shadowBlur = 0;
+
+            // Head (demon-like)
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath(); ctx.arc(enemyX, enemyY-26, 28, 0, Math.PI*2); ctx.fill();
+            // Glowing Red Eyes
+            const eyeGlow = ctx.createRadialGradient(enemyX-11, enemyY-30, 1, enemyX-11, enemyY-30, 6);
+            eyeGlow.addColorStop(0, '#FF0000'); eyeGlow.addColorStop(1, 'rgba(255,0,0,0)');
+            ctx.fillStyle = eyeGlow;
+            ctx.beginPath(); ctx.arc(enemyX-11, enemyY-30, 6, 0, Math.PI*2); ctx.fill();
+            const eyeGlow2 = ctx.createRadialGradient(enemyX+11, enemyY-30, 1, enemyX+11, enemyY-30, 6);
+            eyeGlow2.addColorStop(0, '#FF0000'); eyeGlow2.addColorStop(1, 'rgba(255,0,0,0)');
+            ctx.fillStyle = eyeGlow2;
+            ctx.beginPath(); ctx.arc(enemyX+11, enemyY-30, 6, 0, Math.PI*2); ctx.fill();
+            // Fangs
+            ctx.fillStyle = '#FFF'; ctx.beginPath();
+            ctx.moveTo(enemyX-8, enemyY-14); ctx.lineTo(enemyX-5, enemyY-5); ctx.lineTo(enemyX-2, enemyY-14);
+            ctx.moveTo(enemyX+2, enemyY-14); ctx.lineTo(enemyX+5, enemyY-5); ctx.lineTo(enemyX+8, enemyY-14);
+            ctx.fill();
+            // Beard
+            ctx.fillStyle = '#4A2510';
+            ctx.beginPath(); ctx.arc(enemyX, enemyY-10, 16, 0, Math.PI); ctx.fill();
+
+            // Multi-Crown / Demon Helm (10-crown Ravana style)
+            ctx.shadowColor = '#FF6600'; ctx.shadowBlur = 10;
+            const cGrad = ctx.createLinearGradient(enemyX-40, enemyY-60, enemyX+40, enemyY-40);
+            cGrad.addColorStop(0, '#5A1A04'); cGrad.addColorStop(0.5, '#C47A00'); cGrad.addColorStop(1, '#5A1A04');
+            ctx.fillStyle = cGrad;
+            // Base band
+            ctx.fillRect(enemyX - 38, enemyY - 54, 76, 10);
+            // 5 Crown Peaks
+            const crownPositions = [-30, -16, 0, 16, 30];
+            crownPositions.forEach((cx, i) => {
+                const peakH = i === 2 ? 38 : 26; // center is tallest
+                ctx.beginPath();
+                ctx.moveTo(enemyX + cx - 8, enemyY - 54);
+                ctx.lineTo(enemyX + cx, enemyY - 54 - peakH);
+                ctx.lineTo(enemyX + cx + 8, enemyY - 54);
+                ctx.fill();
+                // Gem on each crown
+                ctx.fillStyle = i === 2 ? '#FF4444' : '#FF8800';
+                ctx.beginPath(); ctx.arc(enemyX + cx, enemyY - 54 - peakH + 10, 4, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = cGrad;
+            });
+
+            ctx.shadowBlur = 0;
+            ctx.restore();
+
+            // Enemy Label
+            ctx.save();
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillRect(enemyX-70, enemyY+165, 140, 26);
+            ctx.fillStyle = '#FF6666';
+            ctx.font = 'bold 13px Cinzel, serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(state.activeBattle?.enemyName || 'Enemy', enemyX, enemyY+183);
+            ctx.restore();
+        }
+
+        /* ==========================================
+           5. TASKS, QUESTS & DIVINE POWERS LOGIC
+           ========================================== */
+        function renderQuests() {
+            const container = document.getElementById('quests-container');
+            container.innerHTML = '';
+
+            QUESTS_DATA.forEach(q => {
+                const curVal = state.taskStats[q.currentKey] || 0;
+                const pct = Math.min(100, Math.round((curVal / q.target) * 100));
+                const isCompleted = curVal >= q.target;
+                const isClaimed = state.claimedQuests.has(q.id);
+
+                const card = document.createElement('div');
+                card.className = `quest-card ${isCompleted ? 'completed' : ''}`;
+
+                let btnHtml = '';
+                if (isClaimed) {
+                    btnHtml = `<button class="btn-claim claimed" disabled>✅ Power Unlocked</button>`;
+                } else if (isCompleted) {
+                    btnHtml = `<button class="btn-claim ready" onclick="claimQuestReward('${q.id}')">🎁 Claim Reward</button>`;
+                } else {
+                    btnHtml = `<button class="btn-claim" disabled>Progress: ${curVal}/${q.target}</button>`;
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="quest-badge-tag">${isCompleted ? 'READY TO CLAIM' : 'IN PROGRESS'}</div>
+                        <div class="quest-title">📜 ${q.title}</div>
+                        <p class="quest-desc">${q.desc}</p>
+                        <div class="quest-progress-bar-bg">
+                            <div class="quest-progress-bar-fill" style="width: ${pct}%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="quest-reward-box">
+                            <div class="quest-reward-info">
+                                <div class="quest-reward-icon">${q.rewardIcon}</div>
+                                <div>
+                                    <div class="quest-reward-name">${q.rewardName}</div>
+                                    <div class="quest-reward-sub">${q.rewardDesc}</div>
+                                </div>
+                            </div>
+                        </div>
+                        ${btnHtml}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function incrementTaskStat(key, amount = 1) {
+            state.taskStats[key] = (state.taskStats[key] || 0) + amount;
+            renderQuests();
+        }
+
+        function claimQuestReward(questId) {
+            const q = QUESTS_DATA.find(item => item.id === questId);
+            if (!q || state.claimedQuests.has(questId)) return;
+
+            state.claimedQuests.add(questId);
+            state.unlockedPowers.add(q.rewardId);
+            
+            const chip = document.getElementById(`power-${q.rewardId}`);
+            if (chip) chip.classList.add('unlocked');
+
+            renderQuests();
+            playTone(880, 'sine', 0.4);
+
+            document.getElementById('reward-modal-icon').innerText = q.rewardIcon;
+            document.getElementById('reward-modal-title').innerText = 'Divine Quest Complete!';
+            document.getElementById('reward-modal-sub').innerText = `Unlocked: ${q.rewardName}`;
+            document.getElementById('reward-modal-desc').innerText = q.rewardDesc;
+            document.getElementById('reward-modal').classList.add('active');
+        }
+
+        function closeRewardModal() {
+            document.getElementById('reward-modal').classList.remove('active');
+        }
+
+        function usePower(powerId) {
+            if (!state.unlockedPowers.has(powerId)) {
+                alert('🔒 This Divine Power is locked! Complete Quests to unlock it.');
+                return;
+            }
+
+            if (powerId === 'hint') {
+                const container = document.getElementById('quiz-container');
+                if (container.style.display !== 'block') {
+                    alert('🔮 Third-Eye Vision eliminates wrong options during a Quiz! Start a quiz to use it.');
+                    return;
+                }
+                const btns = Array.from(document.querySelectorAll('.quiz-opt-btn')).filter(b => !b.disabled && !b.classList.contains('eliminated'));
+                const qData = currentActiveDeity.quiz[currentDeityQIndex];
+                const wrongBtns = btns.filter((b, idx) => idx !== qData.answer);
+                if (wrongBtns.length > 0) {
+                    wrongBtns[0].classList.add('eliminated');
+                    playTone(600, 'sine', 0.2);
+                    alert('🔮 Third-Eye Vision revealed 1 incorrect answer!');
+                }
+
+            } else if (powerId === '2x') {
+                if (state.activePower === '2x') return;
+                state.activePower = '2x';
+                document.body.classList.add('power-active-2x');
+                document.getElementById('multiplier-badge').style.display = 'flex';
+                document.getElementById('power-2x').classList.add('active');
+                playTone(750, 'sine', 0.4);
+                alert('⚡ Saffron Surge Activated! All earned points are DOUBLED for 60 seconds!');
+
+                setTimeout(() => {
+                    state.activePower = null;
+                    document.body.classList.remove('power-active-2x');
+                    document.getElementById('multiplier-badge').style.display = 'none';
+                    document.getElementById('power-2x').classList.remove('active');
+                }, 60000);
+
+            } else if (powerId === 'peek') {
+                const grid = document.getElementById('memory-grid-container');
+                if (!grid || grid.children.length === 0) {
+                    alert('👁️ Chakra Sight briefly flips all cards! Switch to Heritage Memory Match to use it.');
+                    return;
+                }
+                const cards = document.querySelectorAll('.memory-card');
+                cards.forEach(c => c.classList.add('flipped'));
+                playTone(500, 'sine', 0.3);
+                setTimeout(() => {
+                    cards.forEach(c => {
+                        if (!c.classList.contains('matched')) c.classList.remove('flipped');
+                    });
+                }, 2000);
+
+            } else if (powerId === 'shield') {
+                state.activePower = 'shield';
+                document.getElementById('power-shield').classList.add('active');
+                alert('🛡️ Shield of Dharma Activated! Your streak will be protected on your next incorrect answer.');
+            }
+        }
+
+        /* ==========================================
+           6. MODE 1: DEITIES LOGIC
+           ========================================== */
+        function renderDeityCards() {
+            const container = document.getElementById('deity-cards-container');
+            container.innerHTML = '';
+
+            DEITIES_DATA.forEach((d, idx) => {
+                const card = document.createElement('div');
+                card.className = 'deity-card';
+                
+                const imgHtml = d.isSvg ? d.svgCode : `<img src="${d.img}" alt="${d.name}" loading="lazy" onerror="this.src='${d.imgFallback || ''}'; this.onerror=function(){this.parentElement.innerHTML='<div style=\\'background:#220A0E;height:100%;display:flex;align-items:center;justify-content:center;color:#E5C158;font-size:3rem;\\'>🪔</div>';};">`;
+
+                card.innerHTML = `
+                    <div class="deity-img-wrapper">
+                        ${imgHtml}
+                        <div class="deity-tag">${d.domain.split(',')[0]}</div>
+                    </div>
+                    <div class="deity-content">
+                        <h3>${d.name}</h3>
+                        <div class="deity-title-sub">${d.title}</div>
+                        <p class="deity-desc">${d.desc}</p>
+                        <div class="card-actions">
+                            <button class="btn-action btn-secondary" onclick="openLoreModal('${d.id}')">📖 Read Story</button>
+                            <button class="btn-action btn-primary" onclick="startDeityQuiz(${idx})">⚡ Start Quiz</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        let currentActiveDeity = null;
+        let currentDeityQIndex = 0;
+
+        function startDeityQuiz(deityIdx) {
+            currentActiveDeity = DEITIES_DATA[deityIdx];
+            currentDeityQIndex = 0;
+            const container = document.getElementById('quiz-container');
+            container.style.display = 'block';
+            container.scrollIntoView({ behavior: 'smooth' });
+
+            if (state.unlockedPowers.has('hint')) {
+                document.getElementById('use-hint-in-quiz-btn').style.display = 'block';
+            }
+
+            displayQuizQuestion();
+        }
+
+        function displayQuizQuestion() {
+            if (!currentActiveDeity || !currentActiveDeity.quiz[currentDeityQIndex]) return;
+
+            const qData = currentActiveDeity.quiz[currentDeityQIndex];
+            document.getElementById('quiz-progress-text').innerText = `${currentActiveDeity.name} Quiz (${currentDeityQIndex + 1}/${currentActiveDeity.quiz.length})`;
+            
+            const imgEl = document.getElementById('quiz-deity-img');
+            if (currentActiveDeity.isSvg) {
+                imgEl.style.display = 'none';
+            } else {
+                imgEl.style.display = 'block';
+                imgEl.src = currentActiveDeity.img;
+            }
+
+            document.getElementById('quiz-question-text').innerText = qData.question;
+            const optsContainer = document.getElementById('quiz-options-container');
+            optsContainer.innerHTML = '';
+
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            feedbackBox.className = 'quiz-feedback';
+            feedbackBox.style.display = 'none';
+
+            document.getElementById('quiz-next-btn').style.display = 'none';
+
+            qData.options.forEach((optText, oIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-opt-btn';
+                btn.innerHTML = `<span style="color:var(--gold-bright); font-weight:bold;">${String.fromCharCode(65 + oIdx)}.</span> ${optText}`;
+                btn.onclick = () => checkQuizAnswer(oIdx, qData.answer, qData.explanation);
+                optsContainer.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(selectedIdx, correctIdx, explanation) {
+            const btns = document.querySelectorAll('.quiz-opt-btn');
+            btns.forEach(b => b.disabled = true);
+
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            feedbackBox.style.display = 'block';
+
+            if (selectedIdx === correctIdx) {
+                btns[selectedIdx].classList.add('correct');
+                feedbackBox.className = 'quiz-feedback success';
+                feedbackBox.innerHTML = `<strong>✨ Correct Answer!</strong><br>${explanation}`;
+                
+                let basePts = 100;
+                if (state.activePower === '2x') basePts *= 2;
+                addScore(basePts);
+
+                incrementStreak();
+                playTone(587.33, 'sine', 0.2);
+                unlockBadge('b_deity');
+                incrementTaskStat('correctDeityQuizzes', 1);
+
+            } else {
+                btns[selectedIdx].classList.add('wrong');
+                btns[correctIdx].classList.add('correct');
+                feedbackBox.className = 'quiz-feedback error';
+
+                if (state.activePower === 'shield') {
+                    feedbackBox.innerHTML = `<strong>🛡️ Shield of Dharma Saved Your Streak!</strong><br>${explanation}`;
+                    state.activePower = null;
+                    document.getElementById('power-shield').classList.remove('active');
+                } else {
+                    feedbackBox.innerHTML = `<strong>❌ Not quite.</strong><br>${explanation}`;
+                    resetStreak();
+                }
+                playTone(220, 'sawtooth', 0.3);
+            }
+
+            if (currentDeityQIndex < currentActiveDeity.quiz.length - 1) {
+                document.getElementById('quiz-next-btn').style.display = 'block';
+            } else {
+                const nextBtn = document.getElementById('quiz-next-btn');
+                nextBtn.innerText = '🎉 Complete Quiz';
+                nextBtn.style.display = 'block';
+            }
+        }
+
+        function loadNextQuestion() {
+            if (currentDeityQIndex < currentActiveDeity.quiz.length - 1) {
+                currentDeityQIndex++;
+                displayQuizQuestion();
+            } else {
+                closeQuizModal();
+            }
+        }
+
+        function closeQuizModal() {
+            document.getElementById('quiz-container').style.display = 'none';
+        }
+
+        /* ==========================================
+           7. MODE 2: HISTORY VIDEO REELS LOGIC
+           ========================================== */
+        function renderEraTimeline() {
+            const bar = document.getElementById('era-timeline-bar');
+            bar.innerHTML = '';
+
+            ERAS_DATA.forEach((era, idx) => {
+                const tab = document.createElement('div');
+                tab.className = `era-tab ${idx === 0 ? 'active' : ''}`;
+                tab.onclick = () => selectEra(idx);
+                tab.innerHTML = `
+                    <div class="era-date">${era.period}</div>
+                    <div class="era-name">${era.name}</div>
+                `;
+                bar.appendChild(tab);
+            });
+        }
+
+        function selectEra(idx) {
+            state.activeEraIdx = idx;
+            const era = ERAS_DATA[idx];
+
+            document.querySelectorAll('.era-tab').forEach((t, i) => {
+                t.classList.toggle('active', i === idx);
+            });
+
+            document.getElementById('reel-title').innerText = era.name;
+            document.getElementById('reel-date-range').innerText = era.period;
+            document.getElementById('reel-description').innerText = era.desc;
+
+            const ul = document.getElementById('reel-bullets');
+            ul.innerHTML = '';
+            era.bullets.forEach(b => {
+                const li = document.createElement('li');
+                li.innerText = b;
+                ul.appendChild(li);
+            });
+
+            state.reelProgress = 0;
+            document.getElementById('reel-progress-bar').style.width = '0%';
+            drawReelCanvas();
+            unlockBadge('b_historian');
+            incrementTaskStat('watchedReelsCount', 1);
+        }
+
+        function toggleReelPlayback() {
+            state.isReelPlaying = !state.isReelPlaying;
+            const btn = document.getElementById('reel-play-btn');
+            btn.innerText = state.isReelPlaying ? '⏸' : '▶';
+
+            if (state.isReelPlaying) {
+                speakCurrentEraScript();
+                animateReel();
+            } else {
+                if (state.speechSynth) state.speechSynth.cancel();
+            }
+        }
+
+        function animateReel() {
+            if (!state.isReelPlaying) return;
+
+            state.reelProgress += 0.4;
+            if (state.reelProgress > 100) {
+                state.reelProgress = 0;
+            }
+
+            document.getElementById('reel-progress-bar').style.width = `${state.reelProgress}%`;
+            drawReelCanvas();
+
+            state.reelAnimFrame = requestAnimationFrame(animateReel);
+        }
+
+        function drawReelCanvas() {
+            const canvas = document.getElementById('video-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const era = ERAS_DATA[state.activeEraIdx];
+
+            ctx.fillStyle = era.bgColor || '#1A080E';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const t = Date.now() * 0.002;
+            ctx.save();
+            
+            const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 20, canvas.width/2, canvas.height/2, 180);
+            grad.addColorStop(0, 'rgba(229, 193, 88, 0.3)');
+            grad.addColorStop(1, 'transparent');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = '#FFDF00';
+            ctx.lineWidth = 3;
+
+            if (era.reelAnimationType === 'vedic_fire') {
+                ctx.beginPath();
+                const flameY = canvas.height / 2 + Math.sin(t * 3) * 10;
+                ctx.arc(canvas.width / 2, flameY, 45 + Math.sin(t * 5) * 8, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#FF7700';
+                ctx.font = '22px Cinzel';
+                ctx.textAlign = 'center';
+                ctx.fillText('🕉️ VEDIC HYMNS & SACRED AGNI', canvas.width / 2, canvas.height / 2 + 80);
+
+            } else if (era.reelAnimationType === 'maurya_pillar') {
+                ctx.beginPath();
+                ctx.rect(canvas.width / 2 - 30, 80, 60, 160);
+                ctx.stroke();
+
+                ctx.fillStyle = '#00FFCC';
+                ctx.font = '22px Cinzel';
+                ctx.textAlign = 'center';
+                ctx.fillText('☸ ASHOKA CHAKRA & DHARMA EDICTS', canvas.width / 2, canvas.height / 2 + 100);
+
+            } else {
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, canvas.height / 2 - 20, 60 + Math.cos(t) * 10, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#E5C158';
+                ctx.font = '22px Cinzel';
+                ctx.textAlign = 'center';
+                ctx.fillText(era.name.toUpperCase(), canvas.width / 2, canvas.height / 2 + 80);
+            }
+
+            ctx.restore();
+        }
+
+        function speakCurrentEraScript() {
+            if (!state.speechSynth) return;
+            state.speechSynth.cancel();
+
+            const era = ERAS_DATA[state.activeEraIdx];
+            const textToSpeak = `${era.name}, period ${era.period}. ${era.desc}`;
+            
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.rate = 0.95;
+            utterance.pitch = 1.0;
+            
+            document.getElementById('speech-status').innerText = 'Speaking...';
+            utterance.onend = () => {
+                document.getElementById('speech-status').innerText = 'Voice Narration Ready';
+            };
+
+            state.speechSynth.speak(utterance);
+        }
+
+        function startEraQuiz() {
+            const era = ERAS_DATA[state.activeEraIdx];
+            if (!era.quiz) return;
+
+            currentActiveDeity = {
+                name: era.name,
+                img: '',
+                isSvg: true,
+                quiz: [era.quiz]
+            };
+            currentDeityQIndex = 0;
+
+            const container = document.getElementById('quiz-container');
+            container.style.display = 'block';
+            container.scrollIntoView({ behavior: 'smooth' });
+            displayQuizQuestion();
+        }
+
+        /* ==========================================
+           8. MODE 3: HERITAGE MEMORY MATCH LOGIC
+           ========================================== */
+        function initMemoryGame() {
+            state.matchedPairs = 0;
+            state.moves = 0;
+            state.flippedCards = [];
+            document.getElementById('memory-matches').innerText = `0 / ${MEMORY_CARDS_DATA.length}`;
+            document.getElementById('memory-moves').innerText = '0';
+
+            if (state.unlockedPowers.has('peek')) {
+                document.getElementById('use-peek-in-memory-btn').style.display = 'block';
+            }
+
+            const deck = [...MEMORY_CARDS_DATA, ...MEMORY_CARDS_DATA]
+                .map((item, index) => ({ ...item, uniqueId: index }))
+                .sort(() => Math.random() - 0.5);
+
+            const grid = document.getElementById('memory-grid-container');
+            grid.innerHTML = '';
+
+            deck.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'memory-card';
+                cardEl.dataset.id = card.id;
+                cardEl.dataset.uniqueId = card.uniqueId;
+
+                cardEl.innerHTML = `
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front"></div>
+                        <div class="memory-card-back">
+                            <div class="memory-card-icon">${card.icon}</div>
+                            <div class="memory-card-title">${card.title}</div>
+                        </div>
+                    </div>
+                `;
+
+                cardEl.onclick = () => flipMemoryCard(cardEl);
+                grid.appendChild(cardEl);
+            });
+        }
+
+        function flipMemoryCard(cardEl) {
+            if (cardEl.classList.contains('flipped') || state.flippedCards.length >= 2) return;
+
+            cardEl.classList.add('flipped');
+            playTone(440, 'sine', 0.1);
+            state.flippedCards.push(cardEl);
+
+            if (state.flippedCards.length === 2) {
+                state.moves++;
+                document.getElementById('memory-moves').innerText = state.moves;
+                checkMemoryMatch();
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [c1, c2] = state.flippedCards;
+            if (c1.dataset.id === c2.dataset.id) {
+                c1.classList.add('matched');
+                c2.classList.add('matched');
+                state.matchedPairs++;
+                document.getElementById('memory-matches').innerText = `${state.matchedPairs} / ${MEMORY_CARDS_DATA.length}`;
+                
+                let basePts = 150;
+                if (state.activePower === '2x') basePts *= 2;
+                addScore(basePts);
+
+                playTone(880, 'sine', 0.2);
+                state.flippedCards = [];
+
+                if (state.matchedPairs === MEMORY_CARDS_DATA.length) {
+                    unlockBadge('b_memory');
+                    incrementTaskStat('completedMemoryGames', 1);
+                    setTimeout(() => alert('🎉 Fantastic! You completed the Heritage Memory Match!'), 400);
+                }
+            } else {
+                setTimeout(() => {
+                    c1.classList.remove('flipped');
+                    c2.classList.remove('flipped');
+                    state.flippedCards = [];
+                }, 900);
+            }
+        }
+
+        /* ==========================================
+           9. MODE 4: GYAN KOSH (ENCYCLOPEDIA)
+           ========================================== */
+        const ENCYCLO_ARTICLES = {
+            epics: `
+                <h3>📖 The Great Epics of India</h3>
+                <p>India’s classical epics—the <strong>Ramayana</strong> authored by Sage Valmiki and the <strong>Mahabharata</strong> authored by Sage Vyasa—are timeless masterpieces of ethical guidance, duty (Dharma), and devotion.</p>
+                <p>The Mahabharata is the longest epic poem in world literature, containing over 100,000 verses and the sacred discourse of the Bhagavad Gita.</p>
+            `,
+            architecture: `
+                <h3>🛕 Magnificent Indian Temple Architecture</h3>
+                <p>Indian temple architecture evolved across three primary styles: <strong>Nagara</strong> (Northern spire temples), <strong>Dravida</strong> (Southern Gopuram towers), and <strong>Vesara</strong> (hybrid styles).</p>
+                <p>Wonders like the Konark Sun Temple (shaped as a massive stone chariot) and Hampi’s Vitthala temple demonstrate astronomical alignment and acoustic pillar engineering.</p>
+            `,
+            dances: `
+                <h3>💃 Classical Dance Traditions</h3>
+                <p>India recognizes 8 classical dance forms rooted in the ancient treatise <em>Natya Shastra</em> by Sage Bharata:</p>
+                <ul>
+                    <li><strong>Bharatanatyam</strong> (Tamil Nadu) - Expressive footwork & mudras.</li>
+                    <li><strong>Kathakali</strong> (Kerala) - Dramatic face makeup & epic storytelling.</li>
+                    <li><strong>Kathak</strong> (Northern India) - Rhythmic spins & foot percussion.</li>
+                </ul>
+            `,
+            festivals: `
+                <h3>🪔 Festivals of Joy & Heritage</h3>
+                <p>Indian festivals commemorate natural seasons, moral triumphs, and spiritual renewal:</p>
+                <ul>
+                    <li><strong>Diwali:</strong> Festival of Lights celebrating victory of light over darkness.</li>
+                    <li><strong>Holi:</strong> Festival of Colors celebrating spring and unity.</li>
+                    <li><strong>Ganesh Chaturthi:</strong> Celebrating wisdom, learning, and new beginnings.</li>
+                </ul>
+            `
+        };
+
+        function loadEncyclopediaTopic(topicKey) {
+            document.querySelectorAll('.encyclo-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('onclick').includes(topicKey));
+            });
+            document.getElementById('encyclo-content-display').innerHTML = ENCYCLO_ARTICLES[topicKey] || '';
+            incrementTaskStat('readArticlesCount', 1);
+        }
+
+        /* ==========================================
+           10. AUDIO SYNTHESIZER & UTILITIES
+           ========================================== */
+        let audioCtx = null;
+
+        function toggleAudioSynth() {
+            state.audioSynthActive = !state.audioSynthActive;
+            const btn = document.getElementById('audio-toggle-btn');
+            
+            if (state.audioSynthActive) {
+                btn.innerText = '🎵 Ambient Audio: ON';
+                btn.style.background = 'linear-gradient(135deg, #00A896, #0E5E6F)';
+                playAmbientDrone();
+            } else {
+                btn.innerText = '🎵 Ambient Audio: OFF';
+                btn.style.background = 'linear-gradient(135deg, var(--saffron-orange), var(--deep-red))';
+                if (audioCtx) audioCtx.suspend();
+            }
+        }
+
+        function playAmbientDrone() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            } else {
+                audioCtx.resume();
+            }
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(146.83, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+        }
+
+        function playTone(freq, type = 'sine', duration = 0.2) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        /* ==========================================
+           11. SCORE, STREAK & BADGES LOGIC
+           ========================================== */
+        function addScore(pts) {
+            state.score += pts;
+            document.getElementById('user-score').innerText = state.score;
+        }
+
+        function incrementStreak() {
+            state.streak++;
+            document.getElementById('user-streak').innerText = state.streak;
+            if (state.streak >= 3) unlockBadge('b_streak');
+        }
+
+        function resetStreak() {
+            state.streak = 0;
+            document.getElementById('user-streak').innerText = '0';
+        }
+
+        function unlockBadge(badgeId) {
+            if (!state.unlockedBadges.has(badgeId)) {
+                state.unlockedBadges.add(badgeId);
+                renderBadges();
+            }
+        }
+
+        function renderBadges() {
+            const container = document.getElementById('badges-container');
+            container.innerHTML = '';
+
+            BADGES_LIST.forEach(b => {
+                const isUnlocked = state.unlockedBadges.has(b.id);
+                const el = document.createElement('div');
+                el.className = `badge-item ${isUnlocked ? 'unlocked' : ''}`;
+                el.innerHTML = `
+                    <div class="badge-icon">${b.icon}</div>
+                    <div class="badge-name">${b.name}</div>
+                    <div class="badge-desc">${b.desc}</div>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        /* ==========================================
+           12. LORE MODAL CONTROLLER
+           ========================================== */
+        function openLoreModal(deityId) {
+            const d = DEITIES_DATA.find(item => item.id === deityId);
+            if (!d) return;
+
+            document.getElementById('modal-title').innerText = d.name;
+            document.getElementById('modal-subtitle').innerText = d.title;
+            document.getElementById('modal-body').innerHTML = `
+                <p><strong>Domain:</strong> ${d.domain}</p><br>
+                <p>${d.lore}</p>
+            `;
+
+            document.getElementById('lore-modal').classList.add('active');
+        }
+
+        function closeLoreModal() {
+            document.getElementById('lore-modal').classList.remove('active');
+        }
+
+        function speakModalText() {
+            if (!state.speechSynth) return;
+            state.speechSynth.cancel();
+            const text = document.getElementById('modal-body').innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.95;
+            state.speechSynth.speak(utterance);
+        }
+    </script>
+</body>
+</html>
