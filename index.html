@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webcam Filters</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      background: #0a0a0a;
+      color: #e8e8e8;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    .viewport {
+      position: relative;
+      width: min(90vw, 960px);
+      aspect-ratio: 16 / 9;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+    }
+
+    video,
+    canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    video {
+      display: none;
+    }
+
+    .status {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .status.error {
+      color: #c44;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      border: 1px solid #333;
+      border-radius: 6px;
+      background: #1a1a1a;
+      color: #ccc;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #252525;
+      color: #fff;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    select {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #333;
+      border-radius: 6px;
+      background: #1a1a1a;
+      color: #ccc;
+      font: inherit;
+      max-width: min(90vw, 320px);
+    }
+
+    #start {
+      background: #e8e8e8;
+      color: #0a0a0a;
+      border-color: #e8e8e8;
+      font-weight: 500;
+    }
+
+    #start:hover {
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Webcam Filters</h1>
+
+  <div class="viewport">
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <p id="status" class="status">Click below to use your webcam.</p>
+
+  <div class="controls">
+    <select id="camera" hidden aria-label="Camera"></select>
+    <select id="filter" aria-label="Filter" hidden>
+      <option value="grayscale">Black &amp; White</option>
+      <option value="original">Original</option>
+      <option value="sepia">Sepia</option>
+      <option value="invert">Invert</option>
+      <option value="highContrast">High Contrast</option>
+      <option value="posterize">Posterize</option>
+      <option value="pixelate">Pixelate</option>
+      <option value="sketch">Sketch</option>
+      <option value="thermal">Thermal</option>
+      <option value="vintage">Vintage</option>
+    </select>
+    <button id="start" type="button">Use webcam</button>
+    <button id="toggle" type="button" hidden>Pause</button>
+  </div>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const status = document.getElementById('status');
+    const startBtn = document.getElementById('start');
+    const cameraSelect = document.getElementById('camera');
+    const filterSelect = document.getElementById('filter');
+    const toggle = document.getElementById('toggle');
+
+    let stream = null;
+    let running = true;
+    let animationId = null;
+    let pixelCanvas = null;
+    let pixelCtx = null;
+
+    const filters = {
+      original(data) {},
+
+      grayscale(data) {
+        for (let i = 0; i < data.length; i += 4) {
+          const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+          data[i] = data[i + 1] = data[i + 2] = gray;
+        }
+      },
+
+      sepia(data) {
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i], g = data[i + 1], b = data[i + 2];
+          data[i] = Math.min(255, r * 0.393 + g * 0.769 + b * 0.189);
+          data[i + 1] = Math.min(255, r * 0.349 + g * 0.686 + b * 0.168);
+          data[i + 2] = Math.min(255, r * 0.272 + g * 0.534 + b * 0.131);
+        }
+      },
+
+      invert(data) {
+        for (let i = 0; i < data.length; i += 4) {
+          data[i] = 255 - data[i];
+          data[i + 1] = 255 - data[i + 1];
+          data[i + 2] = 255 - data[i + 2];
+        }
+      },
+
+      highContrast(data) {
+        const factor = 1.8;
+        const offset = 128 * (1 - factor);
+        for (let i = 0; i < data.length; i += 4) {
+          for (let c = 0; c < 3; c++) {
+            data[i + c] = Math.max(0, Math.min(255, data[i + c] * factor + offset));
+          }
+        }
+      },
+
+      posterize(data) {
+        const levels = 4;
+        const step = 255 / (levels - 1);
+        for (let i = 0; i < data.length; i += 4) {
+          for (let c = 0; c < 3; c++) {
+            data[i + c] = Math.round(data[i + c] / step) * step;
+          }
+        }
+      },
+
+      sketch(data, width, height) {
+        const copy = new Uint8ClampedArray(data);
+        for (let y = 1; y < height - 1; y++) {
+          for (let x = 1; x < width - 1; x++) {
+            const i = (y * width + x) * 4;
+            const left = copy[i - 4];
+            const right = copy[i + 4];
+            const up = copy[i - width * 4];
+            const down = copy[i + width * 4];
+            const edge = Math.min(255, Math.abs(left - right) + Math.abs(up - down));
+            const val = 255 - edge;
+            data[i] = data[i + 1] = data[i + 2] = val;
+          }
+        }
+      },
+
+      thermal(data) {
+        const palette = [
+          [0, 0, 0], [0, 0, 128], [128, 0, 128], [255, 0, 0],
+          [255, 128, 0], [255, 255, 0], [255, 255, 255],
+        ];
+        for (let i = 0; i < data.length; i += 4) {
+          const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+          const t = gray / 255 * (palette.length - 1);
+          const idx = Math.floor(t);
+          const frac = t - idx;
+          const a = palette[idx];
+          const b = palette[Math.min(idx + 1, palette.length - 1)];
+          data[i] = a[0] + (b[0] - a[0]) * frac;
+          data[i + 1] = a[1] + (b[1] - a[1]) * frac;
+          data[i + 2] = a[2] + (b[2] - a[2]) * frac;
+        }
+      },
+
+      vintage(data, width, height) {
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i], g = data[i + 1], b = data[i + 2];
+          data[i] = Math.min(255, r * 0.9 + 30);
+          data[i + 1] = Math.min(255, g * 0.85 + 10);
+          data[i + 2] = Math.min(255, b * 0.7);
+        }
+        const x = (i) => (i / 4) % width;
+        const y = (i) => Math.floor((i / 4) / width);
+        for (let i = 0; i < data.length; i += 4) {
+          const px = x(i), py = y(i);
+          const cx = width / 2, cy = height / 2;
+          const dist = Math.hypot(px - cx, py - cy) / Math.hypot(cx, cy);
+          const vignette = 1 - dist * 0.65;
+          data[i] *= vignette;
+          data[i + 1] *= vignette;
+          data[i + 2] *= vignette;
+        }
+      },
+    };
+
+    function applyPixelate(sourceCtx, w, h) {
+      const block = 14;
+      const sw = Math.max(1, Math.ceil(w / block));
+      const sh = Math.max(1, Math.ceil(h / block));
+      if (!pixelCanvas) {
+        pixelCanvas = document.createElement('canvas');
+        pixelCtx = pixelCanvas.getContext('2d');
+      }
+      pixelCanvas.width = sw;
+      pixelCanvas.height = sh;
+      pixelCtx.drawImage(canvas, 0, 0, sw, sh);
+      sourceCtx.imageSmoothingEnabled = false;
+      sourceCtx.clearRect(0, 0, w, h);
+      sourceCtx.drawImage(pixelCanvas, 0, 0, w, h);
+      sourceCtx.imageSmoothingEnabled = true;
+    }
+
+    function setStatus(message, isError = false) {
+      status.textContent = message;
+      status.classList.toggle('error', isError);
+    }
+
+    function resizeCanvas() {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+    }
+
+    function drawFrame() {
+      if (!running || !video.videoWidth) {
+        animationId = requestAnimationFrame(drawFrame);
+        return;
+      }
+
+      const w = canvas.width;
+      const h = canvas.height;
+      const filter = filterSelect.value;
+
+      ctx.drawImage(video, 0, 0, w, h);
+
+      if (filter === 'original') {
+        animationId = requestAnimationFrame(drawFrame);
+        return;
+      }
+
+      if (filter === 'pixelate') {
+        applyPixelate(ctx, w, h);
+        animationId = requestAnimationFrame(drawFrame);
+        return;
+      }
+
+      const image = ctx.getImageData(0, 0, w, h);
+      const apply = filters[filter] || filters.grayscale;
+      apply(image.data, w, h);
+      ctx.putImageData(image, 0, 0);
+      animationId = requestAnimationFrame(drawFrame);
+    }
+
+    function stopStream() {
+      cancelAnimationFrame(animationId);
+      stream?.getTracks().forEach((track) => track.stop());
+      stream = null;
+      video.srcObject = null;
+    }
+
+    async function listCameras() {
+      if (!navigator.mediaDevices?.enumerateDevices) return;
+
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const cameras = devices.filter((d) => d.kind === 'videoinput');
+
+      cameraSelect.innerHTML = '';
+      cameras.forEach((cam, i) => {
+        const option = document.createElement('option');
+        option.value = cam.deviceId;
+        option.textContent = cam.label || `Camera ${i + 1}`;
+        cameraSelect.appendChild(option);
+      });
+
+      cameraSelect.hidden = cameras.length <= 1;
+    }
+
+    async function start() {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setStatus('Webcam needs a secure page — use http://localhost:8080', true);
+        return;
+      }
+
+      stopStream();
+      setStatus('Requesting camera access…');
+
+      try {
+        const deviceId = cameraSelect.value;
+        const videoConstraints = deviceId
+          ? { deviceId: { exact: deviceId }, width: { ideal: 1280 }, height: { ideal: 720 } }
+          : { width: { ideal: 1280 }, height: { ideal: 720 } };
+
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: videoConstraints,
+          audio: false,
+        });
+
+        video.srcObject = stream;
+        await video.play();
+        await listCameras();
+
+        if (deviceId) cameraSelect.value = deviceId;
+
+        video.addEventListener('loadedmetadata', resizeCanvas, { once: true });
+        resizeCanvas();
+        running = true;
+        drawFrame();
+
+        setStatus('Live');
+        startBtn.hidden = true;
+        filterSelect.hidden = false;
+        toggle.hidden = false;
+        toggle.textContent = 'Pause';
+      } catch (err) {
+        setStatus(err.name === 'NotAllowedError'
+          ? 'Camera permission denied — allow access and click Use webcam again.'
+          : `Could not access camera: ${err.message}`, true);
+      }
+    }
+
+    startBtn.addEventListener('click', start);
+
+    cameraSelect.addEventListener('change', () => {
+      if (stream) start();
+    });
+
+    toggle.addEventListener('click', () => {
+      running = !running;
+      toggle.textContent = running ? 'Pause' : 'Resume';
+      setStatus(running ? 'Live' : 'Paused');
+      if (running) drawFrame();
+    });
+
+    window.addEventListener('beforeunload', stopStream);
+
+    listCameras().catch(() => {});
+  </script>
+</body>
+</html>
